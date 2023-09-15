@@ -27,11 +27,11 @@ export function retrieveFunctionsByExercise(userId, exerciseId){
     return apiClient.get(`/users/${userId}/functions/exercise/${exerciseId}`);
 }
 
-export function retrievePublicFunctionById(functionId){
+export function retrievePublicFunctionById({functionId}){
     return apiClient.get(`/public/functions/${functionId}`);
 }
 
-export function retrievePrivateFunctionById(userId, functionId){
+export function retrievePrivateFunctionById({userId, functionId}){
     return apiClient.get(`/users/${userId}/functions/${functionId}`);
 }
 
@@ -39,7 +39,7 @@ export function deleteFunctionById(userId, functionId){
     return apiClient.delete(`/users/${userId}/functions/${functionId}`);
 }
 
-export function createFunction(userId, functionDetails){
+export function createFunction({userId}, functionDetails){
     return apiClient.post(`/users/${userId}/functions`, functionDetails);
 }
 

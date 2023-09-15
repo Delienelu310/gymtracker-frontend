@@ -2,6 +2,7 @@ import SearchBar from "./ResourseListElements/SearchBar";
 import ListFilter from "./ResourseListElements/ListFilter";
 
 import { useEffect, useState } from "react";
+import { apiClient } from "../api/ApiClient";
 
 
 export default function ResourceList({
@@ -45,22 +46,27 @@ export default function ResourceList({
             <hr/>
 
             {
-                resourses
-                    .filter((resourse) => {
-                        if(resourse.title && resourse.title.startsWith(searchQuery) ||
-                            resourse.username && resourse.username.startsWith(searchQuery))
-                            return true;
-                    })
-                    .map((resourse) => {                 
-                        return (
-                            <ResourseWrapper resourse={resourse}></ResourseWrapper>
-                        );
-                    })
+                resourses != null ?
+                    resourses
+                        .filter((resourse) => {
+                            if(resourse.title && resourse.title.startsWith(searchQuery) ||
+                                resourse.username && resourse.username.startsWith(searchQuery))
+                                return true;
+                        })
+                        .map((resourse) => {                 
+                            return (
+                                <ResourseWrapper resourse={resourse}></ResourseWrapper>
+                            );
+                        })
+                    :
+                    <span>The resources are missing</span>
 
             }
 
             <hr/>
-
+            <button className="btn btn-success" onClick={() => {
+                apiClient.get("/users")
+            }}>Test</button>
         </div>
     );
 }

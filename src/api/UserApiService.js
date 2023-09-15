@@ -4,27 +4,27 @@ export function retrievePublicUsers(){
     return apiClient.get("/public/users");
 }
 
-export function retrievePublicUserById(userId){
+export function retrievePublicUserById({userId}){
     return apiClient.get(`/public/users/${userId}`);
 }
 
-export function retrievePublicUserByUsername(username){
+export function retrievePublicUserByUsername({username}){
     return apiClient.get(`/public/users/username/${username}`);
 }
 
-export function retrieveFollowersOfExercise(exerciseId){
+export function retrieveFollowersOfExercise({exerciseId}){
     return apiClient.get(`/public/exercise/${exerciseId}/followers`);
 }
 
-export function retrieveFollowersOfFunction(functionId){
+export function retrieveFollowersOfFunction({functionId}){
     return apiClient.get(`/public/function/${functionId}/followers`);
 }
 
-export function retrievePrivateUserById(userId){
+export function retrievePrivateUserById({userId}){
     return apiClient.get(`/users/${userId}`);
 }
 
-export function retrievePrivateUserByUsername(username){
+export function retrievePrivateUserByUsername({username}){
     return apiClient.get(`/users/username/${username}`);
 }
 
@@ -32,7 +32,7 @@ export function deleteUserById(userId){
     return apiClient.delete(`/users/${userId}`);
 }
 
-export function updateUser(userId, userDetails){
+export function updateUser({userId}, userDetails){
     return apiClient.put(`/users/${userId}`, userDetails);
 }
 

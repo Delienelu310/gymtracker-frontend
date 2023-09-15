@@ -1,5 +1,5 @@
-import { useContext, createContext } from "react";
-import { authenticate } from "../api/AuthenticationApi";
+import { useState, useContext, createContext } from "react";
+import { authenticate, register } from "../api/AuthenticationApi";
 import { apiClient } from "../api/ApiClient";
 
 const AuthContext = createContext();
@@ -14,12 +14,32 @@ export default function AuthProvider({children}){
     const [userId, setUserId] = useState(null);
 
     const [token, setToken] = useState(null);
+
+    async function handleRegistration(userDetails){
+        try{
+            const registrationResponse = await register(userDetails);
+            console.log(registrationResponse);
+            if(registrationResponse.status == 200){
+
+                return login(userDetails.username, userDetails.password);
+
+            }else{
+                logout();
+                return false;
+            }
+        }catch(e){
+            logout();
+            return false;
+        }
+    }
     
     async function login(username, password){
         
         try{
             const reponse = await authenticate(username, password);
+            console.log(reponse);
             if(reponse.status == 200){
+                console.log(reponse);
                 const jwtToken = "Bearer " + reponse.data.token;
                 setAuthenticated(true);
                 setUsername(username);
@@ -30,10 +50,13 @@ export default function AuthProvider({children}){
                         return config;
                     }
                 );
-
+                console.log(jwtToken + ' ' + userId);
                 //getting id
                 let userDetails = await apiClient.get(`/users/username/${username}`);
+                console.log(userDetails);
                 setUserId(userDetails.data.userId);
+
+                console.log(token + ' ' + userId);
 
                 return true;
             }else{
@@ -41,6 +64,8 @@ export default function AuthProvider({children}){
                 return false;
             }  
         }catch(error){
+            console.log("Error");
+            console.log(error);
             logout();
             return false;
         }
@@ -53,11 +78,18 @@ export default function AuthProvider({children}){
         setUsername(null);
         setUserId(null);
         setToken(null);
+
+        apiClient.interceptors.request.use(
+            (config) => {
+                config.headers.Authorization = null;
+                return config;
+            }
+        );
     }
 
     return (
 
-        <AuthContext.Provider value={{ isAuthenticated, login, logout, userId, username, token}}>
+        <AuthContext.Provider value={{ isAuthenticated, handleRegistration, login, logout, userId, username, token}}>
             {children}
         </AuthContext.Provider>
     );

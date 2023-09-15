@@ -21,26 +21,26 @@ export function retrievePublicExercises(filteringResources){
         );
 }
 
-export function retrieveExercisesCreated(userId, filteringResources){
+export function retrieveExercisesCreated(filteringResources, {userId}){
     return apiClient.get(`/users/${userId}/exercises/created`).then(response => response.data.filter((exercise => {
         return filterExerciseByFunctions(filteringResources.functions, exercise);
     })));
 }
 
-export function retrieveExercisesFollowed(userId, filteringResources){
+export function retrieveExercisesFollowed(filteringResources, {userId}){
     return apiClient.get(`/users/${userId}/exercises/followed`).then(response => response.data.filter((exercise => {
         return filterExerciseByFunctions(filteringResources.functions, exercise);
     })));
 }
 
-export function retrieveExercisesAll(userId, filteringResources){
+export function retrieveExercisesAll(filteringResources, {userId}){
     return apiClient.get(`/users/${userId}/exercises`).then(response => response.data.filter((exercise => {
         return filterExerciseByFunctions(filteringResources.functions, exercise);
     })));
 }
 
 //not sure if needed this exact function
-export function retreiveExercisesForFunction(userId, functionId){
+export function retreiveExercisesForFunction(filteringResources, {userId, functionId}){
     return apiClient.get(`/users/${userId}/exercises/function/${functionId}`);
 }
 
@@ -58,11 +58,11 @@ export function deleteExerciseById(userId, exerciseId){
     return apiClient.delete(`/users/${userId}/exercises/${exerciseId}`);
 }
 
-export function createExercise(userId, exerciseDetails){
+export function createExercise({userId}, exerciseDetails){
     return apiClient.post(`/users/${userId}/exercises`, exerciseDetails);
 }
 
-export function updateExersice(userId, exerciseId, exerciseDetails){
+export function updateExersice({userId, exerciseId}, exerciseDetails){
     return apiClient.put(`/users/${userId}/exercises/${exerciseId}`, exerciseDetails);
 }
 

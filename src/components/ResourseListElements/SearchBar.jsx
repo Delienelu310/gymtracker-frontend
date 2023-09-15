@@ -5,7 +5,7 @@ export default function SearchBar({
         <div>
             <input 
                 onChange={(e) => {setQuery(e.target.value)}} 
-                value="query"
+                value={query}
                 placeholder="search"
             />
         </div>
