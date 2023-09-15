@@ -6,6 +6,7 @@ import { apiClient } from "../api/ApiClient";
 
 
 export default function ResourceList({
+    filtering,
     ResourseWrapper,
     retrieveResourses,
 }){
@@ -39,6 +40,7 @@ export default function ResourceList({
             ></SearchBar>
 
             <ListFilter
+                filtering={filtering}
                 filteringResourses={filteringResourses}
                 setFilteringResourses={setFilteringResourses}
             ></ListFilter>

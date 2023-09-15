@@ -3,8 +3,8 @@ export default function Exercise({
 }){
     return (
         <div>
-            <span>{resourse.title}</span>
-            <span>{resourse.exerciseId}</span>
+            <div>Exercise id: {resourse.exerciseId}</div>
+            <div>Title: {resourse.exerciseDetails.title}</div>
         </div>
     );
 }
