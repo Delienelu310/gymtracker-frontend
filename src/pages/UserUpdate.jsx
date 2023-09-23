@@ -5,20 +5,22 @@ import { useNavigate } from "react-router-dom";
 import { updateUser, retrievePrivateUserById } from "../api/UserApiService";
 
 export default function UserUpdate(){
+    const params = useParams();
+    
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
     let {userId} = useAuth();
-    if(!userId) userId = useParams().userId;
+    if(!userId) userId = params.userId;
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [fullname, setFullname] = usestate("");
+    const [fullname, setFullname] = useState("");
     
     const navigate = useNavigate();
 
     function setExerciseDetails(){
         
-        if(!functionId) return;
+        if(!userId) return;
 
         retrievePrivateUserById({userId}).then((response) => {
             if(response.status != 200) navigate("/"); 

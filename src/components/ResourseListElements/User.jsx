@@ -1,4 +1,4 @@
-export default function User(resourse){
+export default function User({resourse}){
     return (
         <div>
             <div>User id: {resourse.userId}</div>

@@ -1,6 +1,6 @@
 import { retrievePublicFunctionById } from "../api/FunctionApiService";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function FunctionPublic(){
 
@@ -13,9 +13,10 @@ export default function FunctionPublic(){
     const [authorId, setAuthorId] = useState(null);
     const [authorUsername, setAuthorUsername] = useState("");
 
-    function serFunctionDetails(){
-        retrievePublicFunctionById(functionId)
+    function setFunctionDetails(){
+        retrievePublicFunctionById({functionId})
             .then((response) => {
+                console.log(response);
                 if(response.status != 200) navigate("/");
                 setTitle(response.data.functionDetails.title);
                 setDescription(response.data.functionDetails.description);
@@ -23,10 +24,15 @@ export default function FunctionPublic(){
                 setAuthorUsername(response.data.author.username);
             })
             .catch((e) => {
+                console.log(e);
                 navigate("/");
             });
     }
-    serFunctionDetails();
+
+    useEffect(() => {
+        setFunctionDetails();
+    }, []);
+    
 
     return (
         <div>

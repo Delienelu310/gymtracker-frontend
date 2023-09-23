@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { retrievePublicExerciseById } from "../api/ExerciseApiService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ExercisePublicPage(){
 
-    const {exerciseid} = useParams();
+    const {exerciseId} = useParams();
     const {showError, setShowError} = useState(false);
     const navigate = useNavigate();
 
@@ -16,14 +16,15 @@ export default function ExercisePublicPage(){
     const [functionsPerformance, setFunctionsPerformance] = useState({});
 
     function setExerciseDetails(){
-        retrievePublicExerciseById(exerciseid)
+        retrievePublicExerciseById(exerciseId)
             .then((response) => {
+                console.log(response);
                 if(response.status != 200) navigate("/");
                 setTitle(response.data.exerciseDetails.title);
                 setDescription(response.data.exerciseDetails.description);
                 setAuthorId(response.data.author.userId);
-                setAuthorUsername(response.data.author.username);
-                setFunctions(response.data.functionIncluded);
+                setAuthorUsername(response.data.author.appUserDetails.username);
+                setFunctions(response.data.functionsIncluded);
                 setFunctionsPerformance(response.data.functionsPerformance);
 
             })
@@ -31,7 +32,7 @@ export default function ExercisePublicPage(){
                 navigate("/");
             });
     }
-    setExerciseDetails();
+    useEffect(setExerciseDetails, []);
 
     return (
         <div>
@@ -44,7 +45,7 @@ export default function ExercisePublicPage(){
             }
             {showError && <div>Error</div>}
             <div className="exerciseDetails">
-                <div>Id: {exerciseid}</div>
+                <div>Id: {exerciseId}</div>
                 <div>Title: {title}</div>
                 <div>Description: {description}</div>
 

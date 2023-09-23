@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-export default function ListFilter({filtering: {
-    isActive,
-    isFilteredByUsers,
-    isFilteredByFunctions,
-    isFilteredByExercises
+export default function ListFilter({filtering = {
+    isActive: false,
+    isFilteredByUsers: false,
+    isFilteredByFunctions: false,
+    isFilteredByExercises: false
 }, filteringResourses, setFilteringResourses}){
 
     const [user , setUser] = useState();
@@ -13,11 +13,11 @@ export default function ListFilter({filtering: {
 
     return (
 
-        isActive && 
+        filtering.isActive && 
         <div>
             Filter
             <br/>
-            {isFilteredByUsers && 
+            {filtering.isFilteredByUsers && 
                 <div>
                     User ids: 
                     {filteringResourses.users.map((userId) => <span>{userId}, </span>)}
@@ -28,7 +28,7 @@ export default function ListFilter({filtering: {
                 
                 </div>
             }
-            {isFilteredByFunctions && 
+            {filtering.isFilteredByFunctions && 
                 <div>
                     Functions ids: 
                     {filteringResourses.functions.map((functionId) => <span>{functionId}, </span>)}
@@ -39,7 +39,7 @@ export default function ListFilter({filtering: {
                 
                 </div>
             }
-            {isFilteredByExercises && 
+            {filtering.isFilteredByExercises && 
                 <div>
                     Exercise ids: 
                     {filteringResourses.exercises.map((exerciseId) => <span>{exerciseId}, </span>)}

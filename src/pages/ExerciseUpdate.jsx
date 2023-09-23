@@ -17,7 +17,7 @@ export default function ExerciseUpdate(){
 
     function setExerciseDetails(){
         
-        if(!functionId) return;
+        if(!exerciseId) return;
 
         retrievePrivateExerciseById({userId, exerciseId}).then((response) => {
             if(response.status != 200) navigate("/"); 

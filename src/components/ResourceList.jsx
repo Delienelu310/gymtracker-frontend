@@ -2,14 +2,16 @@ import SearchBar from "./ResourseListElements/SearchBar";
 import ListFilter from "./ResourseListElements/ListFilter";
 
 import { useEffect, useState } from "react";
-import { apiClient } from "../api/ApiClient";
-
+import { useAuth } from "../security/AuthContext";
 
 export default function ResourceList({
     filtering,
     ResourseWrapper,
     retrieveResourses,
+    searchFilterFunction
 }){
+
+    const auth = useAuth();
 
     const [searchQuery, setSearchQuery] = useState('');
     
@@ -23,17 +25,22 @@ export default function ResourceList({
     const [resourses, setResourses] = useState([]);
 
     useEffect(() => {
-        retrieveResourses(filteringResourses)
+        retrieveResourses(filteringResourses, {userId: auth.userId})
             .then((response) => {
-                setResourses(response.data);
+                setResourses(response);
             })
-            .catch(error => console.log(error));
-        }, [filteringResourses, searchQuery]
+            .catch(error => {
+                console.log(error);
+                setResourses(null)
+            });
+        }, [filteringResourses, searchQuery, retrieveResourses]
     );
 
 
     return (
+        
         <div>
+            
             <SearchBar 
                 query={searchQuery} 
                 setQuery={setSearchQuery}
@@ -48,27 +55,21 @@ export default function ResourceList({
             <hr/>
 
             {
-                resourses != null ?
-                    resourses
-                        .filter((resourse) => {
-                            if(resourse.title && resourse.title.startsWith(searchQuery) ||
-                                resourse.username && resourse.username.startsWith(searchQuery))
-                                return true;
-                        })
-                        .map((resourse) => {                 
-                            return (
-                                <ResourseWrapper resourse={resourse}></ResourseWrapper>
-                            );
-                        })
-                    :
-                    <span>The resources are missing</span>
-
+            resourses != null && resourses.length > 0 ?
+                resourses
+                    .filter((resourse) => {
+                        if(!searchFilterFunction) return true;
+                        return searchFilterFunction(resourse, searchQuery);
+                    })
+                    .map((resourse, index) => {                 
+                        return (
+                            <ResourseWrapper key={index} resourse={resourse}></ResourseWrapper>
+                        );
+                    })
+                :
+                <span>The resources are missing</span>
             }
 
-            <hr/>
-            <button className="btn btn-success" onClick={() => {
-                apiClient.get("/users")
-            }}>Test</button>
         </div>
     );
 }

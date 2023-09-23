@@ -5,25 +5,26 @@ export function retrievePublicFunctions(filteringResources){
     return apiClient.get("/public/functions")
         .then((response) => 
             response.data.filter((func) => {
-                return filteringResources.users.includes(func.author.username);
+                return filteringResources.users.length < 1 ||  filteringResources.users.includes(func.author.userId);
             })
         );
 }
 
-export function retrieveFunctionsCreated(userId){
+export function retrieveFunctionsCreated(filteringResources, {userId}){
     return apiClient.get(`/users/${userId}/functions/created`);
 }
 
-export function retrieveFunctionsFollowed(userId){
+export function retrieveFunctionsFollowed(filteringResources, {userId}){
     return apiClient.get(`/users/${userId}/functions/followed`);
 }
 
 
-export function retrieveFunctionsAll(userId){
-    return apiClient.get(`/users/${userId}/functions`);
+export function retrieveFunctionsAll(filteringResources, {userId}){
+    console.log("User id: " + userId);
+    return apiClient.get(`/users/${userId}/functions`).then(response => response.data);
 }
 
-export function retrieveFunctionsByExercise(userId, exerciseId){
+export function retrieveFunctionsByExercise({userId, exerciseId}){
     return apiClient.get(`/users/${userId}/functions/exercise/${exerciseId}`);
 }
 
@@ -43,15 +44,15 @@ export function createFunction({userId}, functionDetails){
     return apiClient.post(`/users/${userId}/functions`, functionDetails);
 }
 
-export function updateFunction(userId, functionId, functionDetails){
+export function updateFunction({userId, functionId}, functionDetails){
     return apiClient.put(`/users/${userId}/functions/${functionId}`, functionDetails);
 }
 
 //only for moderator
-export function updateFunctionPublish(userId, functionId){
+export function updateFunctionPublish({userId, functionId}){
     return apiClient.put(`/users/${userId}/functions/${functionId}/publish`);
 }
 
-export function updateFunctionUnpublish(userId, functionId){
+export function updateFunctionUnpublish({userId, functionId}){
     return apiClient.put(`/users/${userId}/functions/${functionId}/unpublish`);
 }

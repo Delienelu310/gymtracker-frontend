@@ -9,7 +9,6 @@ export function authenticate(username, password){
     console.log(token);
     apiClient.interceptors.request.use(
         (config) => {
-            console.log("Inside: " + token);
             config.headers.Authorization=token;
             return config;
         }

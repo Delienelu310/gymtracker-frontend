@@ -1,7 +1,8 @@
 import { apiClient } from "./ApiClient";
 
 export function retrievePublicUsers(){
-    return apiClient.get("/public/users");
+    return apiClient.get("/public/users")
+        .then(response => response.data);
 }
 
 export function retrievePublicUserById({userId}){
@@ -36,19 +37,19 @@ export function updateUser({userId}, userDetails){
     return apiClient.put(`/users/${userId}`, userDetails);
 }
 
-export function followExercise(userId, exerciseId){
+export function followExercise({userId, exerciseId}){
     return apiClient.put(`users/${userId}/following/exercises/add/${exerciseId}`);
 }
 
-export function unfollowExercise(userId, exerciseId){
+export function unfollowExercise({userId, exerciseId}){
     return apiClient.put(`users/${userId}/following/exercises/add/${exerciseId}`);
 }
 
-export function followFunction(userId, functionId){
+export function followFunction({userId, functionId}){
     return apiClient.put(`users/${userId}/following/functions/add/${functionId}`);
 }
 
-export function unfollowFunction(userId, functionId){
+export function unfollowFunction({userId, functionId}){
     return apiClient.put(`users/${userId}/following/functions/add/${functionId}`);
 }
 

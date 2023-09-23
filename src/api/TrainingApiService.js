@@ -1,7 +1,7 @@
 import { apiClient } from "./ApiClient";
 
 
-export function retrieveTrainingsForExercise(userId, exerciseId){
+export function retrieveTrainingsForExercise({userId, exerciseId}){
     return apiClient.get(`/users/${userId}/exercises/${exerciseId}/trainings`);
 }
 
@@ -9,11 +9,11 @@ export function retrieveTrainingByIds(userId, exerciseId, trainingId){
     return apiClient.get(`/users/${userId}/exercises/${exerciseId}/trainings/${trainingId}`);
 }
 
-export function retrieveTrainingsForUser(userId){
+export function retrieveTrainingsForUser({userId}){
     return apiClient.get(`/users/${userId}/trainings`);
 }
 
-export function deleteTraining(userId, exerciseId, trainingId){
+export function deleteTraining({userId, exerciseId, trainingId}){
     return apiClient.delete(`/users/${userId}/exercises/${exerciseId}/trainings/${trainingId}`);
 }
 
@@ -25,7 +25,8 @@ export function deleteAllTrainingsForUser(userId){
     return apiClient.delete(`/users/${userId}/trainings`);
 }
 
-export function createTraining(userId, exerciseId, training){
+export function createTraining({userId, exerciseId}, training){
+    console.log(training);
     return apiClient.post(`/users/${userId}/exercises/${exerciseId}/trainings`, training);
 }
 

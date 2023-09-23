@@ -18,7 +18,6 @@ export default function AuthProvider({children}){
     async function handleRegistration(userDetails){
         try{
             const registrationResponse = await register(userDetails);
-            console.log(registrationResponse);
             if(registrationResponse.status == 200){
 
                 return login(userDetails.username, userDetails.password);
@@ -37,7 +36,6 @@ export default function AuthProvider({children}){
         
         try{
             const reponse = await authenticate(username, password);
-            console.log(reponse);
             if(reponse.status == 200){
                 console.log(reponse);
                 const jwtToken = "Bearer " + reponse.data.token;
@@ -53,10 +51,7 @@ export default function AuthProvider({children}){
                 console.log(jwtToken + ' ' + userId);
                 //getting id
                 let userDetails = await apiClient.get(`/users/username/${username}`);
-                console.log(userDetails);
                 setUserId(userDetails.data.userId);
-
-                console.log(token + ' ' + userId);
 
                 return true;
             }else{

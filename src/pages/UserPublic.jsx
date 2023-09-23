@@ -5,6 +5,7 @@ import { retrievePublicUserById } from "../api/UserApiService";
 export default function UserPublic(){
 
     const {userId} = useParams();
+
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
@@ -12,7 +13,7 @@ export default function UserPublic(){
     const [email, setEmail] = useState("");
 
     function serFunctionDetails(){
-        retrievePublicUserById(userId)
+        retrievePublicUserById({userId})
             .then((response) => {
                 if(response.status != 200) navigate("/");
                 setUsername(response.data.appUserDetails.username);
