@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../security/AuthContext";
-import { retrievePrivateUserById, updateUser } from "../api/UserApiService";
+import { retrievePrivateUserById, updateUser, updateUserPublish, updateUserUnpublish } from "../api/UserApiService";
 import {retrieveTrainingsForUser} from "../api/TrainingApiService";
 
 import ResourceList from "../components/ResourceList";
@@ -18,7 +18,7 @@ export default function Account(){
     const navigate = useNavigate();
 
     //states for basic data
-    const {userId} = useAuth();
+    const {userId, role} = useAuth();
 
     const [username, setUsername] = useState();
     const [email, setEmail] = useState();
@@ -26,6 +26,7 @@ export default function Account(){
     const [age, setAge] = useState(0);
     const [height, setHeight] = useState(0);
     const [weight, setWeight] = useState(0); 
+    const [published, setPublished] = useState(false);
 
     //trainings
     const [trainings, setTrainings] = useState([]);
@@ -45,6 +46,7 @@ export default function Account(){
                 setAge(response.data.appUserDetails.age);
                 setWeight(response.data.appUserDetails.weight);
                 setHeight(response.data.appUserDetails.height);
+                setPublished(response.data.published);
 
                 //get exercises related to the user
                 retrieveTrainingsForUser({userId}).then(response => {
@@ -106,6 +108,17 @@ export default function Account(){
                         });
                     }} className="btn btn-success">Update</button>
                 </div>
+
+                {/* publising account for moderators */}
+                {(role == "admin" || role == "moder") &&
+                    <div>
+                        {published ?
+                            <button className="btn btn-danger" onClick={() => updateUserUnpublish({userId})}>Unpublish</button>
+                            :
+                            <button className="btn btn-success" onClick={() => updateUserPublish({userId})}>Publish</button>
+                        }
+                    </div>
+                }
 
                 {/* training list */}
                 <div>

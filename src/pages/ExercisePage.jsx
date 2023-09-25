@@ -1,11 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import { calculatePerformanceOfTraining, prepareExerciseGraphData } from "../businessLogic/performanceCalculation";
+
 import { useAuth } from "../security/AuthContext";
 import { retrieveTrainingsForExercise, deleteTraining, createTraining } from "../api/TrainingApiService";
-import { updateExerciseAddingFunction, updateExerciseRemovingFunction, updateExerciseChangingPerformance, deleteExerciseById, retrievePrivateExerciseById, updateExercise } from "../api/ExerciseApiService";
+import { updateExerciseAddingFunction, updateExerciseRemovingFunction, updateExerciseChangingPerformance, 
+    deleteExerciseById, retrievePrivateExerciseById, updateExercise, 
+    updateExercisePublish, updateExerciseUnpublish } from "../api/ExerciseApiService";
 import {unfollowExercise} from "../api/UserApiService";
-import { calculatePerformanceOfTraining, prepareExerciseGraphData } from "../businessLogic/performanceCalculation";
+
 
 import PerformanceGraph from "../components/PerformanceGraph";
 import ResourceList from "../components/ResourceList";
@@ -18,7 +22,7 @@ export default function ExercisePage(){
     //user in a form of graph for this user
 
     const {exerciseId} = useParams();
-    const {userId} = useAuth();
+    const {userId, role} = useAuth();
 
     const [showError, setShowError] = useState(false);
     const navigate = useNavigate();
@@ -27,6 +31,9 @@ export default function ExercisePage(){
     const [description, setDescription] = useState("");
     const [authorId, setAuthorId] = useState(null);
     const [authorUsername, setAuthorUsername] = useState("");
+
+    const [published, setPublished] = useState(false);
+
     const [functions, setFunctions] = useState([]);
     const [functionPerformance, setFunctionPerformance] = useState({});
 
@@ -75,10 +82,14 @@ export default function ExercisePage(){
                 console.log("Exercise details:");
                 console.log(response);
                 if(response.status != 200) navigate("/");
+
                 setTitle(response.data.exerciseDetails.title);
                 setDescription(response.data.exerciseDetails.description);
                 setAuthorId(response.data.author.userId);
                 setAuthorUsername(response.data.author.appUserDetails.username);
+
+                setPublished(response.data.published);
+
                 setFunctions(response.data.functionsIncluded);
                 console.log("Function performance inside:");
                 console.log(response.data.functionPerformance);
@@ -120,13 +131,15 @@ export default function ExercisePage(){
                     
                 </div>
                 
-                {/* Make follow/unfollow based on the request */}
 
                 {
                     authorId == userId ?
                     <div>
                         <button className="btn btn-success" onClick={() => {
-                            updateExercise({userId, exerciseId}, {title, description});
+                            updateExercise({userId, exerciseId}, {title, description}).catch( e => {
+                                setShowError(true);
+                                console.log(e);
+                            });
                         }}>Update</button>
                         <button className="btn btn-danger" onClick={() => {deleteExerciseById({userId: authorId, exerciseId}).then(
                             (response) => {
@@ -151,13 +164,24 @@ export default function ExercisePage(){
                         });
                     }}>Unfollow</button>
                 }
+
+                {/* publising account for moderators */}
+                {(role == "admin" || role == "moder") &&
+                    <div>
+                        {published ?
+                            <button className="btn btn-danger" onClick={() => updateExerciseUnpublish({userId, exerciseId})}>Unpublish</button>
+                            :
+                            <button className="btn btn-success" onClick={() => updateExercisePublish({userId, exerciseId})}>Publish</button>
+                        }
+                    </div>
+                }
                 
 
                 <div>
                     Functions included:
                     {functions.map(func => {
                         return (
-                        <div>
+                        <div key={func.functionId}>
                             <div>Id: {func.functionId}</div>
                             <div>Title: {func.functionDetails.title}</div>
                             <div>Performance: {functionPerformance[func.functionId]}</div>
@@ -211,8 +235,14 @@ export default function ExercisePage(){
                                 updateExerciseAddingFunction({userId: authorId, exerciseId, functionId: functionIdToAdd}).then(
                                     response => updateExerciseChangingPerformance({userId: authorId, exerciseId, functionId: functionIdToAdd, value: performance}).then(
                                         r => setExerciseDetails()
-                                    )
-                                );
+                                    ).catch((e) => {
+                                        console.log(e);
+                                        setShowError(true);
+                                    })
+                                ).catch((e) => {
+                                    console.log(e);
+                                    setShowError(true);
+                                });
                                 
                                 
                             }
@@ -225,7 +255,9 @@ export default function ExercisePage(){
                 <div>
                     <label>Date  <DatePicker
                         selected={date}
-                        onChange={(date) => setDate(date)}
+                        onChange={(date) => {
+                            setDate(date);
+                        }}
                         dateFormat="yyyy-MM-dd" // Customize the date format
                     /></label>
                     <label>Level<input type="number" value={level} onChange={(e) => setLevel(e.target.value)}/></label>
@@ -248,12 +280,15 @@ export default function ExercisePage(){
                     <button className="btn btn-success" onClick={() => {
                         createTraining({userId, exerciseId}, {
                             trainingDetails: {
-                                dateTime: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDay()).padStart(2, '0')}T00:00:00`,
+                                dateTime: `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T00:00:00`,
                             },
                             takes: takes
                         }).then(response => {
                             if(response.status != 200) setShowError(true);
                             refreshTrainingData();
+                        }).catch(e => {
+                            console.log(e);
+                            setShowError(true);
                         });
                         
                         setLevel(0);
@@ -275,8 +310,8 @@ export default function ExercisePage(){
                                 <span>Time: {new Date(date[0], date[1], date[2]).toLocaleDateString()}</span>
                                 <br/>
                                 <span>Takes:</span>
-                                {training.takes.map(take => 
-                                    <div>
+                                {training.takes.map( (take, index) => 
+                                    <div key={index}>
                                         <div>Level: {take.level}</div>
                                         <div>Repeats: {take.repeats}</div> 
                                     </div>                                
@@ -294,9 +329,11 @@ export default function ExercisePage(){
                 </div>
                 
                 {/* training statistic */}
-                <div>
-                    <PerformanceGraph data={data}/>
-                </div>
+                {trainings.length == 0 ||
+                    <div>
+                        <PerformanceGraph data={data}/>
+                    </div>
+                }
                 
 
                 

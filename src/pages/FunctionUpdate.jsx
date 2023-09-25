@@ -1,13 +1,12 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
 import { useState } from "react";
-import { retrievePrivateFunctionById, createFunction, updateFunction } from "../api/FunctionApiService";
+import { createFunction } from "../api/FunctionApiService";
 
 export default function FunctionUpdate(){
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-    const {functionId} = useParams();
     const {userId} = useAuth();
 
     const [title, setTitle] = useState("");
@@ -15,42 +14,17 @@ export default function FunctionUpdate(){
     
     const navigate = useNavigate();
 
-    function setFunctionDetails(){
-        
-        if(!functionId) return;
-
-        retrievePrivateFunctionById({userId, functionId}).then((response) => {
-            if(response.status != 200) navigate("/"); 
-            //also we have to check whether it is moderator/admin
-
-            setTitle(response.data.functionDetails.title);
-            setDescription(response.data.functionDetails.description);
-
-        });
-    
-        
-    }
-
-
     function updateFunc(){
 
-        let action;
-        if(!functionId){
-            //create new function
-            action = createFunction({userId}, {title, description})
-        }else{
-            //update existing functions
-            action = updateFunction({userId, functionId}, {title, description});
-        }
-        action
+        createFunction({userId}, {title, description})
             .then(response => {
                 if(response.status != 200) 
                     setShowErrorMessage(true);
+            }).then(response => {
+                navigate("/private/functions");
             })
             .catch(e => setShowErrorMessage(true));
     }
-
-    setFunctionDetails();
 
     return (
         <div className="container">

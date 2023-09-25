@@ -7,11 +7,12 @@ import { useAuth } from "../security/AuthContext";
 import { retrieveTrainingsForExercise, deleteTraining } from "../api/TrainingApiService";
 import { retreiveExercisesForFunction } from "../api/ExerciseApiService";
 import { unfollowFunction } from "../api/UserApiService";
-import { deleteFunctionById, retrievePrivateFunctionById, updateFunction } from "../api/FunctionApiService";
+import { deleteFunctionById, retrievePrivateFunctionById, updateFunction, updateFunctionPublish, updateFunctionUnpublish } from "../api/FunctionApiService";
 
 import PerformanceGraph from "../components/PerformanceGraph";
 import ResourceList from "../components/ResourceList";
 import ExercisePrivate from "../components/ResourseListElements/ExercisePrivate";
+import Training from "../components/ResourseListElements/Training";
 
 
 export default function FunctionPage(){
@@ -20,7 +21,7 @@ export default function FunctionPage(){
     //user in a form of graph for this user
 
     const {functionId} = useParams();
-    const {userId} = useAuth();
+    const {userId, role} = useAuth();
 
     const [showError, setShowError] = useState(false);
     const navigate = useNavigate();
@@ -30,6 +31,8 @@ export default function FunctionPage(){
     const [description, setDescription] = useState("");
     const [authorId, setAuthorId] = useState(null);
     const [authorUsername, setAuthorUsername] = useState("");
+
+    const [published, setPublished] = useState(false);
 
     //exercises
     const [exercises, setExercises] = useState([]);
@@ -54,12 +57,10 @@ export default function FunctionPage(){
                 setAuthorId(response.data.author.userId);
                 setAuthorUsername(response.data.author.appUserDetails.username);
 
+                setPublished(response.data.published);
+
                 //get exercises related to the function of the user
                 retreiveExercisesForFunction(null, {userId, functionId}).then(response => {
-                    if(response.status != 200) {
-                        navigate('/');
-                        return;
-                    }
 
                     setExercises(response);
                     return response;
@@ -67,6 +68,7 @@ export default function FunctionPage(){
                 }).then(exercises => {
                     //now, when exercises are loaded, we can set trainings of these exercises
                     let trainingPromises = [];
+                    if(!exercises || exercises.length == 0) return null;
                     for(let exercise of exercises){
                         trainingPromises.push(retrieveTrainingsForExercise({userId, exerciseId: exercise.exerciseId}).then(response => {
                             let trainingsCopy = response.data.slice();
@@ -80,6 +82,7 @@ export default function FunctionPage(){
 
                     return Promise.all(trainingPromises);
                 }).then(response => {
+                    if(!response) return [];
                     let newTrainings = [];
                     for(let exerciseTrainings of response){
                         for(let training of exerciseTrainings){
@@ -145,7 +148,10 @@ export default function FunctionPage(){
                     authorId == userId ?
                     <div>
                         <button className="btn btn-success" onClick={(e) => {
-                            updateFunction({userId, functionId}, {title, description});
+                            updateFunction({userId, functionId}, {title, description}).catch(e => {
+                                setShowError(true);
+                                console.log(e);
+                            });
                         }}>Update</button>
                         <button className="btn btn-danger" onClick={() => {deleteFunctionById({userId: authorId, functionId}).then(
                             (response) => {
@@ -170,58 +176,61 @@ export default function FunctionPage(){
                         });
                     }}>Unfollow</button>
                 }
+
+                {/* publising account for moderators */}
+                {(role == "admin" || role == "moder") &&
+                    <div>
+                        {published ?
+                            <button className="btn btn-danger" onClick={() => updateFunctionUnpublish({userId, functionId})}>Unpublish</button>
+                            :
+                            <button className="btn btn-success" onClick={() => updateFunctionPublish({userId, functionId})}>Publish</button>
+                        }
+                    </div>
+                }
                 
                 {/* Exercises of the user, that use this function */}
                 <div>
-                    <ResourceList
-                        key={"private_exercises_list_byfunction"}
-                        retrieveResourses={() => {
-                            return new Promise((resolve, reject) => {
-                                resolve(exercises);
-                            });
-                        }}
-                        ResourseWrapper={ExercisePrivate}
-                    />
+                    {exercises.length == 0 ||
+                        <ResourceList
+                            key={"private_exercises_list_byfunction"}
+                            retrieveResourses={() => {
+                                return new Promise((resolve, reject) => {
+                                    resolve(exercises);
+                                });
+                            }}
+                            ResourseWrapper={ExercisePrivate}
+                        />
+                    }
                 </div>
                 
 
                 {/* training list */}
                 <div>
-                    {
-                    trainings.map(training => 
-                        {
-                        const date = training.trainingDetails.dateTime;
-                        return (
-                            <div key={training.trainingId}>
-                                <span>Exercise id: {training.exerciseId}</span>
-                                <span>Exercise title: {training.exerciseTitle}</span>
-                                <br/>
-                                <span>Training id: {training.trainingId} </span>
-                                <span>Time: {new Date(date[0], date[1], date[2]).toLocaleDateString()}</span>
-                                <br/>
-                                <span>Takes:</span>
-                                {training.takes.map(take => 
-                                    <div>
-                                        <div>Level: {take.level}</div>
-                                        <div>Repeats: {take.repeats}</div> 
-                                    </div>                                
-                                )}
-                                <span>Perforamce: {calculatePerformanceOfTraining(training)}</span>
-                                <button onClick={() => {
-                                    deleteTraining({userId, exerciseId: training.exerciseId, trainingId: training.trainingId})
-                                        .then(response => setFunctionDetails());
-                                    
-                                }} className="btn btn-danger">Delete</button>
-                            </div>  
-                        ) ;
-                        }
-                    )
-                    }
+                    <ResourceList
+                        key={"all_trainings_list"}
+                        retrieveResourses={() => new Promise((resolve) => {
+                            resolve(trainings);
+                        })}
+                        ResourseWrapper={({resourse}) => {
+                            return (
+                                <Training resourse={resourse} refreshResourses={setFunctionDetails}/>
+                            );
+                        }}
+                        searchFilterFunction={(resourse, query)=>{
+                            console.log(resourse);
+                            return String(resourse.trainingId).startsWith(query);
+                        }}
+                    />
                 </div>
+
+            
                 
                 {/* training statistic */}
                 <div>
-                    <PerformanceGraph data={data}/>
+                    {!trainings || trainings.length == 0 ||
+                        <PerformanceGraph data={data}/>
+                    }
+                    
                 </div>
                 
 

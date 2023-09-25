@@ -36,7 +36,7 @@ export function retrievePrivateFunctionById({userId, functionId}){
     return apiClient.get(`/users/${userId}/functions/${functionId}`);
 }
 
-export function deleteFunctionById(userId, functionId){
+export function deleteFunctionById({userId, functionId}){
     return apiClient.delete(`/users/${userId}/functions/${functionId}`);
 }
 

@@ -1,6 +1,7 @@
 import { useState, useContext, createContext } from "react";
 import { authenticate, register } from "../api/AuthenticationApi";
 import { apiClient } from "../api/ApiClient";
+import jwt_decode from 'jwt-decode';
 
 const AuthContext = createContext();
 
@@ -14,6 +15,10 @@ export default function AuthProvider({children}){
     const [userId, setUserId] = useState(null);
 
     const [token, setToken] = useState(null);
+
+    const [role, setRole] = useState(null);
+
+    const [requestInjector, setRequestInjector] = useState(null);
 
     async function handleRegistration(userDetails){
         try{
@@ -36,18 +41,32 @@ export default function AuthProvider({children}){
         
         try{
             const reponse = await authenticate(username, password);
+            console.log(1);
             if(reponse.status == 200){
                 console.log(reponse);
                 const jwtToken = "Bearer " + reponse.data.token;
                 setAuthenticated(true);
                 setUsername(username);
                 setToken(jwtToken);
-                apiClient.interceptors.request.use(
-                    (config) => {
-                        config.headers.Authorization=jwtToken
-                        return config;
-                    }
-                );
+
+                console.log("Jwt roles:");
+                const decodedToken = jwt_decode(jwtToken.substring(7));
+                console.log(decodedToken);
+
+                let roles = decodedToken.scope.split(" ");
+                if(roles.includes("ROLE_ADMIN"))
+                    setRole("admin");
+                else if(roles.includes("ROLE_MODER"))
+                    setRole("moder")
+                else if(roles.includes("ROLE_USER"))
+                    setRole("user");
+
+                setRequestInjector(apiClient.interceptors.request.use((config) => {
+                    config.headers.Authorization=jwtToken
+                    return config;
+                }));
+
+                console.log(apiClient.interceptors);
                 console.log(jwtToken + ' ' + userId);
                 //getting id
                 let userDetails = await apiClient.get(`/users/username/${username}`);
@@ -73,18 +92,19 @@ export default function AuthProvider({children}){
         setUsername(null);
         setUserId(null);
         setToken(null);
+        setRole(null);
 
-        apiClient.interceptors.request.use(
-            (config) => {
-                config.headers.Authorization = null;
-                return config;
-            }
-        );
+        console.log(requestInjector);
+        apiClient.interceptors.request.eject(requestInjector);
+        setRequestInjector(null);
+
+        console.log("Interceptors after logout");
+        console.log(apiClient.interceptors);
     }
 
     return (
 
-        <AuthContext.Provider value={{ isAuthenticated, handleRegistration, login, logout, userId, username, token}}>
+        <AuthContext.Provider value={{ isAuthenticated, handleRegistration, login, logout, userId, username, token, role}}>
             {children}
         </AuthContext.Provider>
     );

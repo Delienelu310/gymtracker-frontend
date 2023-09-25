@@ -59,11 +59,11 @@ export function deleteExerciseById({userId, exerciseId}){
 }
 
 export function createExercise({userId}, exerciseDetails){
-    return apiClient.post(`/users/${userId}/exercises`, exerciseDetails);
+    return apiClient.post(`/users/${userId}/created/exercises`, exerciseDetails);
 }
 
 export function updateExercise({userId, exerciseId}, exerciseDetails){
-    return apiClient.put(`/users/${userId}/exercises/${exerciseId}`, exerciseDetails);
+    return apiClient.put(`/users/${userId}/created/exercises/${exerciseId}`, exerciseDetails);
 }
 
 export function updateExerciseAddingFunction({userId, exerciseId, functionId}){
@@ -85,10 +85,10 @@ export function updateExerciseChangingPerformance({userId, exerciseId, functionI
 }
 
 //only for moderator
-export function updateExercisePublish(userId, exerciseId){
+export function updateExercisePublish({userId, exerciseId}){
     return apiClient.put(`/users/${userId}/exercises/${exerciseId}/publish`);
 }
 
-export function updateExerciseUnpublish(userId, exerciseId){
+export function updateExerciseUnpublish({userId, exerciseId}){
     return apiClient.put(`/users/${userId}/exercises/${exerciseId}/unpublish`);
 }

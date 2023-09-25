@@ -4,7 +4,7 @@ export function calculatePerformanceOfTake({repeats, level}){
 }
 
 export function calculatePerformanceOfTraining({takes}){
-    return Math.round(Math.max(takes.map(take => calculatePerformanceOfTake(take))) * 100) / 100;
+    return Math.round(Math.max(...takes.map(take => calculatePerformanceOfTake(take))) * 100) / 100;
 }
 
 export function prepareExerciseGraphData(trainings){
@@ -34,8 +34,9 @@ export function prepareFunctionGraphData(trainingsForEachExercise){
 
         let exerciseGraph = [];
         for(let training of trainings){
+            let date = training.trainingDetails.dateTime;
             exerciseGraph.push({
-                x: training.trainingDetails.dateTime,
+                x: new Date(date[0], date[1], date[2]),
                 y: Math.round(calculatePerformanceOfTraining(training) / initialPerformance * 100) / 100
             });
         }

@@ -1,11 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { retrievePublicExerciseById } from "../api/ExerciseApiService";
 import { useEffect, useState } from "react";
+import { followExercise } from "../api/UserApiService";
+import { useAuth } from "../security/AuthContext";
 
 export default function ExercisePublicPage(){
 
     const {exerciseId} = useParams();
-    const {showError, setShowError} = useState(false);
+
+    const {isAuthenticated, userId} = useAuth();
+
+    const [showError, setShowError] = useState(false);
     const navigate = useNavigate();
 
     const [title, setTitle] = useState("");
@@ -16,7 +21,7 @@ export default function ExercisePublicPage(){
     const [functionsPerformance, setFunctionsPerformance] = useState({});
 
     function setExerciseDetails(){
-        retrievePublicExerciseById(exerciseId)
+        retrievePublicExerciseById({exerciseId})
             .then((response) => {
                 console.log(response);
                 if(response.status != 200) navigate("/");
@@ -45,32 +50,52 @@ export default function ExercisePublicPage(){
             }
             {showError && <div>Error</div>}
             <div className="exerciseDetails">
-                <div>Id: {exerciseId}</div>
-                <div>Title: {title}</div>
-                <div>Description: {description}</div>
+                <div>
+                    <span>Id: {exerciseId}</span>
+                    <br/>
+                    <span>Title: {title}</span>
+                    <br/>
+                    <span>Description: {description}</span>
+                </div>
 
                 <div>
                     Author: 
                     <br/>
-                    <div>Id: {authorId}</div>
-                    <div>Username: {authorUsername}</div>
+                    <span>Id: {authorId}</span>
+                    <br/>
+                    <span>Username: {authorUsername}</span>
                 </div>
 
-                <div>
-                    Functions included:
-                    {functions.map(func => {
-                        return (
-                        <div>
-                            <div>Id: {func.functionId}</div>
-                            <div>Title: {func.functionDetails.title}</div>
-                            <div>Performance: {functionsPerformance[func.functionId]}</div>
-                        </div>
-                        )
-                    })}
-                </div>
-
+                {functions && functions.length > 0 && 
+                    <div>
+                        Functions included:
+                        {functions.map(func => {
+                            return (
+                            <div>
+                                <div>Id: {func.functionId}</div>
+                                <div>Title: {func.functionDetails.title}</div>
+                                <div>Performance: {functionsPerformance[func.functionId]}</div>
+                            </div>
+                            )
+                        })}
+                    </div>
+                }
                 {/* Make follow/unfollow based on the request */}
-                <button onClick={() => "function to be implemented"}>Follow/Unfollow</button>
+                {isAuthenticated &&
+                    <button onClick={() => {
+                        followExercise({userId, exerciseId}).then(response => {
+                            if(response.status != 200){
+                                setShowError(true);
+                                return;
+                            }
+                            setShowError(false);
+                        }).catch(e => {
+                            console.log(e);
+                            setShowError(true);
+                        });
+                    }}>Follow</button>
+                }
+                
                 
             </div>
 

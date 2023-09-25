@@ -5,6 +5,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 export default function PerformanceGraph({data}){
 
+    console.log(data);
+
     const [domainX, setDomainX] = useState([new Date(2023, 0, 10), new Date(2023, 0, 15)]);
     const [minDate, setMinDate] = useState(domainX[0]);
     const [maxDate, setMaxDate] = useState(domainX[1]);
@@ -13,44 +15,51 @@ export default function PerformanceGraph({data}){
         setDomainX([minDate, maxDate]);
     };
 
+    function generateColor(){
+        let luminance = 1;
+        let color;
+        do{
+            const red = Math.floor(Math.random() * 256);
+            const green = Math.floor(Math.random() * 256);
+            const blue = Math.floor(Math.random() * 256);
+
+            color = `rgb(${red}, ${green}, ${blue})`;
+            luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+        }while(luminance > 0.7 && luminance < 0.3);
+
+        return color;
+    }
+
     return (
         <div>
 
             <div style={{width:"700px", height:"900px", display: "inline-block"}}>
                 <VictoryChart width={400} height={300} domain={{ x: domainX }}>
                     {data.map((oneline, index) => {
-                        let luminance = 1;
-                        let color;
-                        do{
-                            const red = Math.floor(Math.random() * 256);
-                            const green = Math.floor(Math.random() * 256);
-                            const blue = Math.floor(Math.random() * 256);
-
-                            color = `rgb(${red}, ${green}, ${blue})`;
-                            luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
-                        }while(luminance > 0.7);
-                        
                         return (
-                        <>
                             <VictoryScatter
-                                key={index}
+                                key={index * 2 + 1}
                                 data={oneline}
                                 size={5}
-                                style={{ data: { fill: 'red'} }} // Customize marker style
+                                style={{ data: { fill: generateColor()} }} 
                                 labels={({ datum }) => ` ${datum.y}`} 
                                 labelComponent={
                                     <VictoryLabel
-                                        style={{ fontSize: 5, fill: color }} // Set the label font size and color
+                                        style={{ fontSize: 10, fill: 'red' }}
                                     />
                                 }
                             />
-                            <VictoryLine
-                                key={index}
-                                data={oneline}
-                                style={{stroke: color}}
-                            />
-                        </>
                     )})}
+
+                    {data.map((oneline, index) => {
+                        return (
+                            <VictoryLine
+                                key={index * 2}
+                                data={oneline}
+                                style={{data: {stroke: generateColor()}}}
+                            /> 
+                        );
+                    })}
                     
 
                     <VictoryAxis label="Time"
@@ -72,6 +81,7 @@ export default function PerformanceGraph({data}){
                     />
                 </VictoryChart>
             </div>
+
             <div style={{display: "inline-block"}}>
                 <div>
                     <label>Min Date:</label>

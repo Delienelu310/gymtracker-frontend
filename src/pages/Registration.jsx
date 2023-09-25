@@ -38,11 +38,11 @@ export default function Registration(){
                     <input type="text" name="username" value={username} onChange={(event) => setUsername(event.target.value)} />
                 </div>
                 <div>
-                    <label>User Name</label>
+                    <label>Fullname</label>
                     <input type="text" name="fullname" value={fullname} onChange={(event) => setFullname(event.target.value)} />
                 </div>
                 <div>
-                    <label>User Name</label>
+                    <label>Email</label>
                     <input type="text" name="email" value={email} onChange={(event) => setEmail(event.target.value)} />
                 </div>
                 <div>

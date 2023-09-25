@@ -42,7 +42,7 @@ export function followExercise({userId, exerciseId}){
 }
 
 export function unfollowExercise({userId, exerciseId}){
-    return apiClient.put(`users/${userId}/following/exercises/add/${exerciseId}`);
+    return apiClient.put(`users/${userId}/following/exercises/remove/${exerciseId}`);
 }
 
 export function followFunction({userId, functionId}){
@@ -50,15 +50,15 @@ export function followFunction({userId, functionId}){
 }
 
 export function unfollowFunction({userId, functionId}){
-    return apiClient.put(`users/${userId}/following/functions/add/${functionId}`);
+    return apiClient.put(`users/${userId}/following/functions/remove/${functionId}`);
 }
 
+//for moderators?
 
-
-export function updateUserPublish(userId){
+export function updateUserPublish({userId}){
     return apiClient.put(`/users/${userId}/publish`);
 }
 
-export function updateUserUnpublish(userId){
+export function updateUserUnpublish({userId}){
     return apiClient.put(`/users/${userId}/unpublish`);
 }

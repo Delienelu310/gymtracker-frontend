@@ -1,56 +1,32 @@
 import { useAuth } from "../security/AuthContext";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { createExercise, retrievePrivateExerciseById, updateExercise } from "../api/ExerciseApiService";
+import { createExercise } from "../api/ExerciseApiService";
 
 export default function ExerciseUpdate(){
     const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-    const {exerciseId} = useParams();
     const {userId} = useAuth();
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    
+
     const navigate = useNavigate();
 
-    function setExerciseDetails(){
-        
-        if(!exerciseId) return;
-
-        retrievePrivateExerciseById({userId, exerciseId}).then((response) => {
-            if(response.status != 200) navigate("/"); 
-            //also we have to check whether it is moderator/admin
-
-            setTitle(response.data.exerciseDetails.title);
-            setDescription(response.data.exerciseDetails.description);
-
-        });
-    
-        
-    }
-
-
     function updateExer(){
-
-        let action;
-        if(!exerciseId){
-            //create new function
-            action = createExercise({userId}, {title, description})
-        }else{
-            //update existing functions
-            action = updateExercise({userId, exerciseId}, {title, description});
-        }
-        action
+        createExercise({userId}, {title, description})
             .then(response => {
                 if(response.status != 200) 
                     setShowErrorMessage(true);
             })
-            .catch(e => setShowErrorMessage(true));
+            .then(reponse => {
+                navigate(`/private/exercises`);
+            })
+            .catch(e => {
+                console.log(e);
+                setShowErrorMessage(true)
+            });
     }
-
-    setExerciseDetails();
 
     return (
         <div className="container">
@@ -65,7 +41,7 @@ export default function ExerciseUpdate(){
                     <input type="text" name="description" value={description} onChange={(event) => setDescription(event.target.value)} />
                 </div>
                 <div>
-                    <button type="button" name="update" className='btn btn-success' onClick={updateExer}>Update</button>
+                    <button type="button" name="create" className='btn btn-success' onClick={updateExer}>Create</button>
                 </div>
             </div>
         </div>

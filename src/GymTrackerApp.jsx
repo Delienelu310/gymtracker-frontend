@@ -1,29 +1,35 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ResourceList from './components/ResourceList';
+//special
+import { useAuth } from './security/AuthContext';
 import { retrievePublicExercises, retrieveExercisesAll, retrieveExercisesCreated, retrieveExercisesFollowed } from './api/ExerciseApiService';
 import { retrievePublicFunctions, retrieveFunctionsAll, retrieveFunctionsCreated, retrieveFunctionsFollowed } from './api/FunctionApiService';
+import { retrievePublicUsers } from './api/UserApiService';
+
+import AuthProvider from './security/AuthContext';
+import Header from './components/Header';
+
+//lists and their componnets:
 import Exercise from './components/ResourseListElements/Exercise';
 import ExercisePrivate from './components/ResourseListElements/ExercisePrivate'
 import Function from "./components/ResourseListElements/Function";
+import User from './components/ResourseListElements/User';
+import ResourceList from './components/ResourceList';
 
+//pages
 import Login from './pages/Login';
-import AuthProvider from './security/AuthContext';
 import Registration from './pages/Registration';
-import Header from './components/Header';
-import { useAuth } from './security/AuthContext';
-import { Navigate } from 'react-router-dom';
+
 import ExerciseUpdate from './pages/ExerciseUpdate';
 import FunctionUpdate from './pages/FunctionUpdate';
-import UserUpdate from './pages/UserUpdate';
-import { retrievePublicUsers } from './api/UserApiService';
-import User from './components/ResourseListElements/User';
+
 import UserPublic from './pages/UserPublic';
 import ExercisePublicPage from './pages/ExercisePublicPage';
 import FunctionPublic from './pages/FunctionPublic';
 import ExercisePage from './pages/ExercisePage';
 import FunctionPage from './pages/FunctionPage';
 import Account from './pages/Account';
+import FunctionPrivate from './components/ResourseListElements/FunctionPrivate';
 
 function AuthenticatedRoute({children}){
 
@@ -93,6 +99,9 @@ export default function GymTrackerApp(){
                                 key={"private_exercises_list"}
                                 retrieveResourses={retrieveExercisesAll}
                                 ResourseWrapper={ExercisePrivate}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.exerciseDetails.title.startsWith(query);
+                                }}
                             />
                         </AuthenticatedRoute>
                     }/>
@@ -103,6 +112,9 @@ export default function GymTrackerApp(){
                                 key={"private_exercises_created_list"}
                                 retrieveResourses={retrieveExercisesCreated}
                                 ResourseWrapper={ExercisePrivate}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.exerciseDetails.title.startsWith(query);
+                                }}
                             />
                         </AuthenticatedRoute>
                     }/>
@@ -113,6 +125,9 @@ export default function GymTrackerApp(){
                                 key={"private_exercises_followed_list"}
                                 retrieveResourses={retrieveExercisesFollowed}
                                 ResourseWrapper={ExercisePrivate}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.exerciseDetails.title.startsWith(query);
+                                }}
                             />
                         </AuthenticatedRoute>
                     }/>
@@ -135,7 +150,10 @@ export default function GymTrackerApp(){
                             <ResourceList
                                 key={"private_functions_list"}
                                 retrieveResourses={retrieveFunctionsAll}
-                                ResourseWrapper={Function}
+                                ResourseWrapper={FunctionPrivate}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.functionDetails.title.startsWith(query);
+                                }}
                             />
                         </AuthenticatedRoute>
                     }/>
@@ -145,7 +163,10 @@ export default function GymTrackerApp(){
                             <ResourceList
                                 key={"private_functions_created_list"}
                                 retrieveResourses={retrieveFunctionsCreated}
-                                ResourseWrapper={Function}
+                                ResourseWrapper={FunctionPrivate}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.functionDetails.title.startsWith(query);
+                                }}
                             />
                         </AuthenticatedRoute>
                     }/>
@@ -155,7 +176,10 @@ export default function GymTrackerApp(){
                             <ResourceList
                                 key={"private_functions_followed_list"}
                                 retrieveResourses={retrieveFunctionsFollowed}
-                                ResourseWrapper={Function}
+                                ResourseWrapper={FunctionPrivate}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.functionDetails.title.startsWith(query);
+                                }}
                             />
                         </AuthenticatedRoute>
                     }/>
@@ -190,39 +214,18 @@ export default function GymTrackerApp(){
                         </AuthenticatedRoute>
                     }/>
 
-                    {/* resourse updating pages */}
-                    <Route path="/update/exercises/:exerciseId" element={
-                        <AuthenticatedRoute>
-                            <ExerciseUpdate/>
-                        </AuthenticatedRoute>
-                    }/>
-                    <Route path="/update/functions/:functionsId" element={
-                        <AuthenticatedRoute>
-                            <FunctionUpdate/>
-                        </AuthenticatedRoute>
-                    }/>
-                    <Route path="/update/account" element={
-                        <AuthenticatedRoute>
-                            <UserUpdate/>
-                        </AuthenticatedRoute>
-                    }/>
-
                     {/* resource creating pages */}
-                    <Route path="/update/exercises" element={
+                    <Route path="/create/exercise" element={
                         <AuthenticatedRoute>
                             <ExerciseUpdate/>
                         </AuthenticatedRoute>
                     }/>
-                    <Route path="/update/functions" element={
+                    <Route path="/create/function" element={
                         <AuthenticatedRoute>
                             <FunctionUpdate/>
                         </AuthenticatedRoute>
                     }/>
                     
-
-
-                    {/* admin pages */}
-                    {/* admin should have access to update, read and other pages through links like user/userid/resourse/resourseid etc*/}
 
                 </Routes>
             </BrowserRouter>

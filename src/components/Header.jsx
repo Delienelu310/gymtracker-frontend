@@ -46,6 +46,7 @@ export default function Header(){
                             <NavDropdown.Item as={Link} to="/private/exercises">All Private Exercises</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/private/exercises/created">Created Exercises</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/private/exercises/followed">Followed Exercises</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/create/exercise">Create new Exercise</NavDropdown.Item>
                         </>}
                     </NavDropdown>
                     <NavDropdown title="Functions" id="functions-dropdown">
@@ -54,6 +55,7 @@ export default function Header(){
                             <NavDropdown.Item as={Link} to="/private/functions">All Private Functions</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/private/functions/created">Created Functions</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/private/functions/followed">Followed Functions</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/create/function">Create new Function</NavDropdown.Item>
                         </>}
                     </NavDropdown>
                         
