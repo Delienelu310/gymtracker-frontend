@@ -39,7 +39,7 @@ export default function ResourceList({
 
     return (
         
-        <div>
+        <div className="m-5">
             
             <SearchBar 
                 query={searchQuery} 

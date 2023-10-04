@@ -28,19 +28,19 @@ export default function Login() {
     }
 
     return (
-        <div className="Login">
+        <div className="wrapper">
             {showErrorMessage && <div className='errorMessage'>Error</div>}
             <div className="LoginForm">
                 <div>
-                    <label>User Name</label>
-                    <input type="text" name="username" value={username} onChange={(event) => setUsername(event.target.value)} />
+                    <label className="m-2" for="username">User Name</label>
+                    <input className="form-control" type="text" id="username" name="username" value={username} onChange={(event) => setUsername(event.target.value)} />
                 </div>
                 <div>
-                    <label>Password</label>
-                    <input type="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+                    <label className='m-2' for="password">Password</label>
+                    <input className="form-control" id="password" type="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} />
                 </div>
                 <div>
-                    <button type="button" name="login" className='btn btn-success' onClick={handleSubmit}>Login</button>
+                    <button type="button" name="login" className='btn btn-success m-5' onClick={handleSubmit}>Login</button>
                 </div>
             </div>
         </div>

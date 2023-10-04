@@ -7,6 +7,7 @@ export default function SearchBar({
                 onChange={(e) => {setQuery(e.target.value)}} 
                 value={query}
                 placeholder="search"
+                className="form-control"
             />
         </div>
     );

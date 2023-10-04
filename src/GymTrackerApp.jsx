@@ -49,13 +49,16 @@ export default function GymTrackerApp(){
                 <Routes>
                     
                     <Route path="/" element={
-                        <ResourceList
-                            retrieveResourses={retrievePublicExercises}
-                            searchFilterFunction={(resourse, query) => {
-                                return resourse.exerciseDetails.title.startsWith(query);
-                            }}
-                            ResourseWrapper={Exercise}
-                        />}
+                        <div className='wrapper'>
+                            <ResourceList
+                                retrieveResourses={retrievePublicExercises}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.exerciseDetails.title.startsWith(query);
+                                }}
+                                ResourseWrapper={Exercise}
+                            />
+                        </div>
+                        }
                     />
                     <Route path="/register" element={
                         <Registration/>
@@ -67,15 +70,19 @@ export default function GymTrackerApp(){
                     {/* public users */}
 
                     <Route path="/public/users" element={
-                        <ResourceList
-                            key={"public_users_list"}
-                            retrieveResourses={retrievePublicUsers}
-                            ResourseWrapper={User}
-                            searchFilterFunction={(resourse, query) => {
-                                return resourse.appUserDetails.username.startsWith(query);
-                            }}
-                        />
+                        <div className='wrapper'>
+                            <ResourceList
+                                key={"public_users_list"}
+                                retrieveResourses={retrievePublicUsers}
+                                ResourseWrapper={User}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.appUserDetails.username.startsWith(query);
+                                }}
+                            />
+                        </div>
                     }/>
+
+
                     <Route path="/public/users/:userId" element={
                         <UserPublic/>
                     }/>
@@ -83,104 +90,127 @@ export default function GymTrackerApp(){
                     {/* exercise lists */}
 
                     <Route path="/exercises" element={
-                        <ResourceList
-                            key={"public_exercises_list"}
-                            retrieveResourses={retrievePublicExercises}
-                            ResourseWrapper={Exercise}
-                            searchFilterFunction={(resourse, query) => {
-                                return resourse.exerciseDetails.title.startsWith(query);
-                            }}
-                        />}
-                    />
-
-                    <Route path="/private/exercises" element={
-                        <AuthenticatedRoute>
+                        <div className='wrapper'>
                             <ResourceList
-                                key={"private_exercises_list"}
-                                retrieveResourses={retrieveExercisesAll}
-                                ResourseWrapper={ExercisePrivate}
+                                key={"public_exercises_list"}
+                                retrieveResourses={retrievePublicExercises}
+                                ResourseWrapper={Exercise}
                                 searchFilterFunction={(resourse, query) => {
                                     return resourse.exerciseDetails.title.startsWith(query);
                                 }}
                             />
+                        </div>
+                    }/>
+
+                    <Route path="/private/exercises" element={
+                        <AuthenticatedRoute>
+                            <div className='wrapper'>
+                                <ResourceList
+                                    key={"private_exercises_list"}
+                                    retrieveResourses={retrieveExercisesAll}
+                                    ResourseWrapper={ExercisePrivate}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.exerciseDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                            
                         </AuthenticatedRoute>
                     }/>
 
                     <Route path="/private/exercises/created" element={
                         <AuthenticatedRoute>
-                            <ResourceList
-                                key={"private_exercises_created_list"}
-                                retrieveResourses={retrieveExercisesCreated}
-                                ResourseWrapper={ExercisePrivate}
-                                searchFilterFunction={(resourse, query) => {
-                                    return resourse.exerciseDetails.title.startsWith(query);
-                                }}
-                            />
+                            <div className='wrapper'>
+                                <ResourceList
+                                    key={"private_exercises_created_list"}
+                                    retrieveResourses={retrieveExercisesCreated}
+                                    ResourseWrapper={ExercisePrivate}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.exerciseDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                            
                         </AuthenticatedRoute>
                     }/>
 
                     <Route path="/private/exercises/followed" element={
                         <AuthenticatedRoute>
-                            <ResourceList
-                                key={"private_exercises_followed_list"}
-                                retrieveResourses={retrieveExercisesFollowed}
-                                ResourseWrapper={ExercisePrivate}
-                                searchFilterFunction={(resourse, query) => {
-                                    return resourse.exerciseDetails.title.startsWith(query);
-                                }}
-                            />
+                            <div className='wrapper'>
+                                <ResourceList
+                                    key={"private_exercises_followed_list"}
+                                    retrieveResourses={retrieveExercisesFollowed}
+                                    ResourseWrapper={ExercisePrivate}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.exerciseDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                            
                         </AuthenticatedRoute>
                     }/>
 
                     {/* function lists */}
 
                     <Route path="/functions" element={
-                        <ResourceList
-                            key={"public_functions_list"}
-                            retrieveResourses={retrievePublicFunctions}
-                            ResourseWrapper={Function}
-                            searchFilterFunction={(resourse, query) => {
-                                return resourse.functionDetails.title.startsWith(query);
-                            }}
-                        />
-                    }/>
-
-                    <Route path="/private/functions" element={
-                        <AuthenticatedRoute>
+                        <div className='wrapper'>
                             <ResourceList
-                                key={"private_functions_list"}
-                                retrieveResourses={retrieveFunctionsAll}
-                                ResourseWrapper={FunctionPrivate}
+                                key={"public_functions_list"}
+                                retrieveResourses={retrievePublicFunctions}
+                                ResourseWrapper={Function}
                                 searchFilterFunction={(resourse, query) => {
                                     return resourse.functionDetails.title.startsWith(query);
                                 }}
                             />
+                        </div>
+                        
+                    }/>
+
+                    <Route path="/private/functions" element={
+                        <AuthenticatedRoute>
+                            <div className='wrapper'>
+                                <ResourceList
+                                    key={"private_functions_list"}
+                                    retrieveResourses={retrieveFunctionsAll}
+                                    ResourseWrapper={FunctionPrivate}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.functionDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                            
                         </AuthenticatedRoute>
                     }/>
 
                     <Route path="/private/functions/created" element={
                         <AuthenticatedRoute>
-                            <ResourceList
-                                key={"private_functions_created_list"}
-                                retrieveResourses={retrieveFunctionsCreated}
-                                ResourseWrapper={FunctionPrivate}
-                                searchFilterFunction={(resourse, query) => {
-                                    return resourse.functionDetails.title.startsWith(query);
-                                }}
-                            />
+                            <div className='wrapper'>
+                                <ResourceList
+                                    key={"private_functions_created_list"}
+                                    retrieveResourses={retrieveFunctionsCreated}
+                                    ResourseWrapper={FunctionPrivate}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.functionDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                            
                         </AuthenticatedRoute>
                     }/>
 
                     <Route path="/private/functions/followed" element={
                         <AuthenticatedRoute>
-                            <ResourceList
-                                key={"private_functions_followed_list"}
-                                retrieveResourses={retrieveFunctionsFollowed}
-                                ResourseWrapper={FunctionPrivate}
-                                searchFilterFunction={(resourse, query) => {
-                                    return resourse.functionDetails.title.startsWith(query);
-                                }}
-                            />
+                            <div className='wrapper'>
+                                <ResourceList
+                                    key={"private_functions_followed_list"}
+                                    retrieveResourses={retrieveFunctionsFollowed}
+                                    ResourseWrapper={FunctionPrivate}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.functionDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                            
                         </AuthenticatedRoute>
                     }/>
 

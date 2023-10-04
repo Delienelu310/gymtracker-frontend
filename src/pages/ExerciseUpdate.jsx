@@ -30,20 +30,23 @@ export default function ExerciseUpdate(){
 
     return (
         <div className="container">
-            {showErrorMessage && <div className='errorMessage'>Error</div>}
-            <div className="LoginForm">
-                <div>
-                    <label>Title</label>
-                    <input type="text" name="title" value={title} onChange={(event) => setTitle(event.target.value)} />
-                </div>
-                <div>
-                    <label>Description</label>
-                    <input type="text" name="description" value={description} onChange={(event) => setDescription(event.target.value)} />
-                </div>
-                <div>
-                    <button type="button" name="create" className='btn btn-success' onClick={updateExer}>Create</button>
+            <div className="wrapper">
+                {showErrorMessage && <div className='errorMessage'>Error</div>}
+                <div className="LoginForm">
+                    <div>
+                        <label for="title" className="m-2">Title</label>
+                        <input className="form-control" id="title" type="text" name="title" value={title} onChange={(event) => setTitle(event.target.value)} />
+                    </div>
+                    <div>
+                        <label for="description" className="m-2">Description</label>
+                        <input className="form-control" id="description" type="text" name="description" value={description} onChange={(event) => setDescription(event.target.value)} />
+                    </div>
+                    <div>
+                        <button type="button" name="create" className='btn btn-success m-5' onClick={updateExer}>Create</button>
+                    </div>
                 </div>
             </div>
+            
         </div>
     );
 }

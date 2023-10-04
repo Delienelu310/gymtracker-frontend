@@ -73,24 +73,35 @@ export default function Account(){
     return (
         <div>
             {showError && <div>Error</div>}
-            <div className="userDetails">
+            <div className="userDetails wrapper">
 
                 {/* Basic details */}
                 <div>
-                    <span>User Id: {userId}</span>
-                    <br/>
-                    <label>Username: <input onChange={(e) => setUsername(e.target.value)} value={username}/></label>
-                    <br/>
-                    <label>Email: <input onChange={e => setEmail(e.target.value)} value={email}/></label>
-                    <br/>
-                    <label>Fullname: <input onChange={e => setFullname(e.target.value)} value={fullname}/></label>
-                    <br/>
-                    <label>Age: <input onChange={e => setAge(e.target.value)} value={age}/></label>
-                    <br/>
-                    <label>Height: <input onChange={e => setHeight(e.target.value)} value={height}/></label>
-                    <br/>
-                    <label>Weight: <input onChange={e => setWeight(e.target.value)} value={weight}/></label>
-                    <br/>
+                    <div className="m-2">
+                        User Id: 
+                        <br/>
+                        <b>{userId}</b>
+                    </div>
+
+                    <label for="username" className="p-2">Username: </label>
+                    <input type="text" class="form-control" id="username"  onChange={(e) => setUsername(e.target.value)} value={username}/>
+
+                    <label for="email" className="p-2">Email: </label>
+                    <input type="email" className="form-control" id="email" onChange={e => setEmail(e.target.value)} value={email}/>
+
+                    <label for="fullname" className="p-2">Fullname: </label>
+                    <input type="text" className="form-control" id="fullname" onChange={e => setFullname(e.target.value)} value={fullname}/>
+
+                    <label for="age" className="p-2">Age: </label>
+                    <input type="number" className="form-control" id="age" onChange={e => setAge(e.target.value)} value={age}/>
+
+
+                    <label for="height" className="p-2">Height: </label>
+                    <input type="number" className="form-control" id="height" onChange={e => setHeight(e.target.value)} value={height}/>
+
+                    <label for="weight" className="p-2">Weight: </label>
+                    <input type="number" className="form-control" id="weight" onChange={e => setWeight(e.target.value)} value={weight}/>
+
                     <button onClick={() => {
                         updateUser({userId}, {
                             username,
@@ -106,22 +117,23 @@ export default function Account(){
                             console.log(e);
                             setShowError(true);
                         });
-                    }} className="btn btn-success">Update</button>
+                    }} className="btn btn-success m-5">Update</button>
                 </div>
 
-                {/* publising account for moderators */}
+                {/* publishing account for moderators */}
                 {(role == "admin" || role == "moder") &&
                     <div>
                         {published ?
-                            <button className="btn btn-danger" onClick={() => updateUserUnpublish({userId})}>Unpublish</button>
+                            <button className="btn btn-danger m-3" onClick={() => updateUserUnpublish({userId})}>Unpublish</button>
                             :
-                            <button className="btn btn-success" onClick={() => updateUserPublish({userId})}>Publish</button>
+                            <button className="btn btn-success m-3" onClick={() => updateUserPublish({userId})}>Publish</button>
                         }
                     </div>
                 }
 
                 {/* training list */}
                 <div>
+                    <h3 className="lead m-4">The whole training history:</h3>
                     <ResourceList
                         key={"all_trainings_list"}
                         retrieveResourses={() => new Promise((resolve) => {

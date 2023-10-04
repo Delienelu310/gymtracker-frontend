@@ -30,27 +30,27 @@ export default function Registration(){
     }
 
     return (
-        <div className="Login">
+        <div className="wrapper">
             {showErrorMessage && <div className='errorMessage'>Error</div>}
-            <div className="LoginForm">
+            <div className="RegistrationForm">
                 <div>
-                    <label>User Name</label>
-                    <input type="text" name="username" value={username} onChange={(event) => setUsername(event.target.value)} />
+                    <label className='m-2' for="username">User Name</label>
+                    <input className="form-control" type="text" name="username" value={username} onChange={(event) => setUsername(event.target.value)} />
                 </div>
                 <div>
-                    <label>Fullname</label>
-                    <input type="text" name="fullname" value={fullname} onChange={(event) => setFullname(event.target.value)} />
+                    <label className='m-2' for="fullname">Fullname</label>
+                    <input className="form-control" type="text" id="fullname" name="fullname" value={fullname} onChange={(event) => setFullname(event.target.value)} />
                 </div>
                 <div>
-                    <label>Email</label>
-                    <input type="text" name="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+                    <label className='m-2' for="email">Email</label>
+                    <input className="form-control" type="email" id="email" name="email" value={email} onChange={(event) => setEmail(event.target.value)} />
                 </div>
                 <div>
-                    <label>Password</label>
-                    <input type="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+                    <label className='m-2' for="password">Password</label>
+                    <input className="form-control" type="password" id="password" name="password" value={password} onChange={(event) => setPassword(event.target.value)} />
                 </div>
                 <div>
-                    <button type="button" name="login" className='btn btn-success' onClick={handleSubmit}>Login</button>
+                    <button type="button" name="login" className='btn btn-success m-5' onClick={handleSubmit}>Register</button>
                 </div>
             </div>
         </div>

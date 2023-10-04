@@ -29,17 +29,17 @@ export default function FunctionUpdate(){
     return (
         <div className="container">
             {showErrorMessage && <div className='errorMessage'>Error</div>}
-            <div className="LoginForm">
+            <div className="wrapper">
                 <div>
-                    <label>Title</label>
-                    <input type="text" name="title" value={title} onChange={(event) => setTitle(event.target.value)} />
+                    <label for="title" className="m-2">Title</label>
+                    <input className="form-control" type="text" id="title" name="title" value={title} onChange={(event) => setTitle(event.target.value)} />
                 </div>
                 <div>
-                    <label>Description</label>
-                    <input type="text" name="description" value={description} onChange={(event) => setDescription(event.target.value)} />
+                    <label for="description" className="m-2">Description</label>
+                    <input className="form-control" type="text" id="description" name="description" value={description} onChange={(event) => setDescription(event.target.value)} />
                 </div>
                 <div>
-                    <button type="button" name="update" className='btn btn-success' onClick={updateFunc}>Update</button>
+                    <button type="button" name="update" className='btn btn-success m-5' onClick={updateFunc}>Update</button>
                 </div>
             </div>
         </div>

@@ -4,10 +4,10 @@ export default function ExercisePrivate({
     resourse
 }){
     return (
-        <div>
-            <div>Exercise id: {resourse.exerciseId}</div>
-            <div>Title: {resourse.exerciseDetails.title}</div>
-            <Link className="btn btn-success" to={`/private/exercises/${resourse.exerciseId}`}>more...</Link>
+        <div className="post">
+            <h4>{resourse.exerciseDetails.title}</h4>
+            <div>ID: {resourse.exerciseId}</div>
+            <Link className="btn btn-primary m-2" to={`/private/exercises/${resourse.exerciseId}`}>Look</Link>
         </div>
     );
 }
