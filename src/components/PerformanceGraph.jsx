@@ -33,7 +33,7 @@ export default function PerformanceGraph({data}){
     return (
         <div>
 
-            <div style={{width:"700px", height:"900px", display: "inline-block"}}>
+            <div style={{width:"400px", height:"400px", display: "inline-block"}}>
                 <VictoryChart width={400} height={300} domain={{ x: domainX }}>
                     {data.map((oneline, index) => {
                         return (

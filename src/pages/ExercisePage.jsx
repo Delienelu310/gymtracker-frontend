@@ -107,261 +107,324 @@ export default function ExercisePage(){
     return (
         <div>
             {showError && <div>Error</div>}
-            <div className="exerciseDetails">
-                <div className="wrapper exercise-data">
-                    <div>
-                        {authorId == userId ? 
-                            <div>
-                                <div className="m-2">
-                                    ID: 
-                                    <br/>
-                                    <b>{exerciseId}</b>
-                                </div>
-                                <label className="m-2" for="title">Title: </label>
-                                <input className="form-control" id="title" onChange={e => setTitle(e.target.value)} value={title}/>
+            <div className="exerciseDetails" style={{
+                display: "flex",
+                "justify-content": "space-between"
+            }}>
 
-                                <label className="m-2" for="description">Description: </label>
-                                <input className="form-control" id="description" onChange={e => setDescription(e.target.value)} value={description}/>
-                            </div>
-                            :
-                            <div>
+                <div className="left-block wrapper" style={{marginTop: "20px"}}>
+
+                    <div className="exercise-data block-component" >
+                        <div className="wrapper">
+                            {authorId == userId ? 
                                 <div>
-                                    ID: 
-                                    <br/>
-                                    <b>{exerciseId}</b>
+                                    <h4>Exercise data:</h4>
+                                    <div className="m-2">
+                                        ID: 
+                                        <br/>
+                                        <b>{exerciseId}</b>
+                                    </div>
+                                    <label className="m-2" for="title">Title: </label>
+                                    <input className="form-control" id="title" onChange={e => setTitle(e.target.value)} value={title}/>
+
+                                    <label className="m-2" for="description">Description: </label>
+                                    <input className="form-control" id="description" onChange={e => setDescription(e.target.value)} value={description}/>
                                 </div>
+                                :
                                 <div>
-                                    Title: 
-                                    <br/>
-                                    <b>{title}</b>
+                                    <div>
+                                        ID: 
+                                        <br/>
+                                        <b>{exerciseId}</b>
+                                    </div>
+                                    <div>
+                                        Title: 
+                                        <br/>
+                                        <b>{title}</b>
+                                    </div>
+                                    <div>
+                                        Description: 
+                                        <br/>
+                                        <b>{description}</b>
+                                    </div>
+                                </div>  
+                            }
+                            <div className="m-3">
+                                Author: 
+                                <br/>
+                                <div className="m-2">
+                                    ID: <b>{authorId}</b>
                                 </div>
-                                <div>
-                                    Description: 
-                                    <br/>
-                                    <b>{description}</b>
+                                <div className="m-2">
+                                    Username: <b>{authorUsername}</b>
                                 </div>
-                            </div>  
-                        }
-                        <div className="m-3">
-                            Author: 
-                            <br/>
-                            <div className="m-2">
-                                ID: <b>{authorId}</b>
                             </div>
-                            <div className="m-2">
-                                Username: <b>{authorUsername}</b>
-                            </div>
+                            
                         </div>
                         
+
+                        {
+                            authorId == userId ?
+                            <div>
+                                <button className="btn btn-success m-3" onClick={() => {
+                                    updateExercise({userId, exerciseId}, {title, description}).catch( e => {
+                                        setShowError(true);
+                                        console.log(e);
+                                    });
+                                }}>Update</button>
+                                <button className="btn btn-danger m-3" onClick={() => {deleteExerciseById({userId: authorId, exerciseId}).then(
+                                    (response) => {
+                                        if(response.status === 200) navigate("/")
+                                        setShowError(true);
+                                    }).catch(error => {
+                                        console.log(error);
+                                        setShowError(true);
+                                    })}}
+                                >
+                                    Delete
+                                </button> 
+                            </div>
+                            :
+                            <button className="btn btn-danger m-3" onClick={() => {
+                                unfollowExercise({userId, exerciseId}).then(response => {
+                                    if(response.status == 200) navigate("/");
+                                    setShowError(true);
+                                }).catch(e => {
+                                    console.log(e);
+                                    setShowError(true);
+                                });
+                            }}>Unfollow</button>
+                        }
+
+                        {/* publising account for moderators */}
+                        {(role == "admin" || role == "moder") &&
+                            <div>
+                                {published ?
+                                    <button className="btn btn-danger m-3" onClick={() => updateExerciseUnpublish({userId, exerciseId})}>Unpublish</button>
+                                    :
+                                    <button className="btn btn-success m-3" onClick={() => updateExercisePublish({userId, exerciseId})}>Publish</button>
+                                }
+                            </div>
+                        }
+                    
                     </div>
                     
+                    {/* adding function */}
+                    <div className="block-component">
+                        {userId == authorId &&
+                            <div className="wrapper">
+                                <h4 className="m-2">Connect function: </h4>
 
-                    {
-                        authorId == userId ?
-                        <div>
-                            <button className="btn btn-success m-3" onClick={() => {
-                                updateExercise({userId, exerciseId}, {title, description}).catch( e => {
-                                    setShowError(true);
-                                    console.log(e);
-                                });
-                            }}>Update</button>
-                            <button className="btn btn-danger m-3" onClick={() => {deleteExerciseById({userId: authorId, exerciseId}).then(
-                                (response) => {
-                                    if(response.status === 200) navigate("/")
-                                    setShowError(true);
-                                }).catch(error => {
-                                    console.log(error);
-                                    setShowError(true);
-                                })}}
-                            >
-                                Delete
-                            </button> 
-                        </div>
-                        :
-                        <button className="btn btn-danger m-3" onClick={() => {
-                            unfollowExercise({userId, exerciseId}).then(response => {
-                                if(response.status == 200) navigate("/");
-                                setShowError(true);
-                            }).catch(e => {
-                                console.log(e);
-                                setShowError(true);
-                            });
-                        }}>Unfollow</button>
-                    }
+                                <label className="m-2" for="functionId">Function id:</label>
+                                <input className="form-control m-2" id="functionId" onChange={(e) => {setFunctionIdToAdd(e.target.value)}} value={functionIdToAdd} placeholder="function id"/>
 
-                    {/* publising account for moderators */}
-                    {(role == "admin" || role == "moder") &&
-                        <div>
-                            {published ?
-                                <button className="btn btn-danger m-3" onClick={() => updateExerciseUnpublish({userId, exerciseId})}>Unpublish</button>
-                                :
-                                <button className="btn btn-success m-3" onClick={() => updateExercisePublish({userId, exerciseId})}>Publish</button>
-                            }
-                        </div>
-                    }
-                
-                </div>
+                                <label className="m-2" for="performance" >Performance desired:</label>
+                                <input className="form-control m-2" id="performance" onChange={(e)=> {setPerformance(e.target.value)}} value={performance} type="number" placeholder="performance"/>
 
-                <div className="wrapper funcitons-block">
-                    {functions.length == 0 || 
-                        <div>
-                            <h4>Functions included:</h4>
-                            {functions.map(func => {
-                                return (
-                                <div key={func.functionId}>
-                                    <div>Id: {func.functionId}</div>
-                                    <div>Title: {func.functionDetails.title}</div>
-                                    <div>Performance: {functionPerformance[func.functionId]}</div>
-                                    {userId == authorId && (
-                                        <div>
-                                            <input onChange={(e) => {
-                                                let functionPerformanceCopy = Object.assign({}, functionPerformance);
-                                                functionPerformanceCopy[func.functionId] = e.target.value;
-                                                setFunctionPerformance(functionPerformanceCopy);
-                                            }} value={functionPerformance[func.functionId]} type="number"/>
-                                            <button className="btn btn-success" onClick={() => {
-                                                updateExerciseChangingPerformance({userId, exerciseId, functionId: func.functionId, value: functionPerformance[func.functionId]}).then(
-                                                    response => setExerciseDetails()
-                                                );
-                                                
-                                            }}>Edit</button>
-                                        </div>
-                                    )}
-                                    {userId == authorId && 
-                                        <button 
-                                            onClick={
-                                                () => {
-                                                    updateExerciseRemovingFunction({userId, exerciseId, functionId: func.functionId}).then(
-                                                        response => setExerciseDetails()
-                                                    );
-                                                    
-                                                }
-                                            }
-                                            className="btn btn-danger"
-                                        >
-                                            Remove
-                                        </button> 
-                                    }
-                                    
-                                </div>
-                                )
-                            })}
-                        </div>
-                    }
-
-                    {userId == authorId &&
-                        <div>
-                            <label className="m-2" for="functionId">Function id:</label>
-                            <input className="form-control m-2" id="functionId" onChange={(e) => {setFunctionIdToAdd(e.target.value)}} value={functionIdToAdd} placeholder="function id"/>
-  
-                            <label className="m-2" for="performance" >Performance desired:</label>
-                            <input className="form-control m-2" id="performance" onChange={(e)=> {setPerformance(e.target.value)}} value={performance} type="number" placeholder="performance"/>
-
-                            <button onClick={() => {
-                                if(!functions.map(func => func.functionId).includes(functionIdToAdd)){
-                                    updateExerciseAddingFunction({userId: authorId, exerciseId, functionId: functionIdToAdd}).then(
-                                        response => updateExerciseChangingPerformance({userId: authorId, exerciseId, functionId: functionIdToAdd, value: performance}).then(
-                                            r => setExerciseDetails()
+                                <button onClick={() => {
+                                    if(!functions.map(func => func.functionId).includes(functionIdToAdd)){
+                                        updateExerciseAddingFunction({userId: authorId, exerciseId, functionId: functionIdToAdd}).then(
+                                            response => updateExerciseChangingPerformance({userId: authorId, exerciseId, functionId: functionIdToAdd, value: performance}).then(
+                                                r => setExerciseDetails()
+                                            ).catch((e) => {
+                                                console.log(e);
+                                                setShowError(true);
+                                            })
                                         ).catch((e) => {
                                             console.log(e);
                                             setShowError(true);
-                                        })
-                                    ).catch((e) => {
-                                        console.log(e);
-                                        setShowError(true);
-                                    });
-                                }
-                                    
-                            }} className="btn btn-success m-2">Add</button>
+                                        });
+                                    }
+                                        
+                                }} className="btn btn-success m-2">Add</button>
+                            </div>
+                        }
+
+                        <hr/>
+                        {/* functions list */}
+                        <div className="wrapper funcitons-block">
+                            {functions.length == 0 || 
+                                <div>
+                                    <h4>Functions included:</h4>
+                                    {functions.map(func => {
+                                        return (
+                                        <div key={func.functionId} className="post">
+                                            
+                                            <h4>{func.functionDetails.title}</h4>
+                                            <div>ID: {func.functionId}</div>
+                                            <div>Performance: <b>{functionPerformance[func.functionId]}</b></div>
+                                            {userId == authorId && (
+                                                <div>
+                                                    <input className="form-control m-2" onChange={(e) => {
+                                                        let functionPerformanceCopy = Object.assign({}, functionPerformance);
+                                                        functionPerformanceCopy[func.functionId] = e.target.value;
+                                                        setFunctionPerformance(functionPerformanceCopy);
+                                                    }} value={functionPerformance[func.functionId]} type="number"/>
+                                                    <button className="btn btn-success m-2" onClick={() => {
+                                                        updateExerciseChangingPerformance({userId, exerciseId, functionId: func.functionId, value: functionPerformance[func.functionId]}).then(
+                                                            response => setExerciseDetails()
+                                                        );
+                                                        
+                                                    }}>Edit</button>
+                                                </div>
+                                            )}
+                                            {userId == authorId && 
+                                                <button 
+                                                    onClick={
+                                                        () => {
+                                                            updateExerciseRemovingFunction({userId, exerciseId, functionId: func.functionId}).then(
+                                                                response => setExerciseDetails()
+                                                            );
+                                                            
+                                                        }
+                                                    }
+                                                    className="btn btn-danger"
+                                                >
+                                                    Remove
+                                                </button> 
+                                            }
+                                            
+                                        </div>
+                                        )
+                                    })}
+                                </div>
+                            }
+
+                            
+
+                        </div>
+                    </div>
+                </div>
+
+                <div className="right-block" style={{marginTop: "20px"}}>
+                    {/* training statistic */}
+                    {trainings.length == 0 ||
+                        <div className="block-component">
+                            <h4>Graph data</h4>
+                            <PerformanceGraph data={data}/>
                         </div>
                     }
 
-                </div>
+                    <div className="block-component">
+                        {/* adding new training */}
+                        <div className="wrapper">
+
+                            <h4>Add new training:</h4>
 
 
-                {/* adding new training */}
-                <div>
-                    <label>Date  <DatePicker
-                        selected={date}
-                        onChange={(date) => {
-                            setDate(date);
-                        }}
-                        dateFormat="yyyy-MM-dd" // Customize the date format
-                    /></label>
-                    <label>Level<input type="number" value={level} onChange={(e) => setLevel(e.target.value)}/></label>
-                    <br/>
-                    <label>Repeats<input type="number" value={repeats} onChange={(e) => setRepeats(e.target.value)}/></label>
-                    <br/>
-                    <div>
-                        {takes.map((take, index) => (
-                            <div key={index}>
-                                Level: {take.level}, Repeats: {take.repeats}
-                                <button onClick={() => {
-                                    let takesCopy = takes.slice();
-                                    takesCopy.splice(index, 1);
-                                    setTakes(takesCopy);
-                                }} className="btn btn-danger">Delete</button>
+                            <div className="m-3">
+                                Date: <DatePicker
+                                    className="form-control"
+                                    selected={date}
+                                    onChange={(date) => {
+                                        setDate(date);
+                                    }}
+                                    dateFormat="yyyy-MM-dd" // Customize the date format
+                                />
                             </div>
-                        ))}
+                            
+                            
+
+                            {takes.length == 0 ||
+                                <div className="wrapper">
+                                    <h5>Sets:</h5>
+                                    {takes.map((take, index) => (
+                                        <div key={index} className="post">
+                                            Level: <b>{take.level}</b>
+                                            <br/>
+                                            Repeats: <b>{take.repeats}</b>
+                                            <br/>
+                                            <button onClick={() => {
+                                                let takesCopy = takes.slice();
+                                                takesCopy.splice(index, 1);
+                                                setTakes(takesCopy);
+                                            }} className="btn btn-danger m-1">Delete</button>
+                                        </div>
+                                    ))}
+                                </div>
+                            }
+                            
+                            <div>
+                                <h5>Add set:</h5>
+
+                                <label for="level" className="m-2">Level</label>
+                                <input id="level" className="form-control m-2" type="number" value={level} onChange={(e) => setLevel(e.target.value)}/>
+
+                                <label for="repeats" className="m-2">Repeats</label>
+                                <input id="repeats" className="form-control m-2" type="number" value={repeats} onChange={(e) => setRepeats(e.target.value)}/>
+
+                                <button className="btn btn-success m-2" onClick={() => setTakes(takes.concat([{level, repeats}]))}>Add set</button>
+                            </div>
+
+                            
+                            <button className="btn btn-success m-3" onClick={() => {
+                                createTraining({userId, exerciseId}, {
+                                    trainingDetails: {
+                                        dateTime: `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T00:00:00`,
+                                    },
+                                    takes: takes
+                                }).then(response => {
+                                    if(response.status != 200) setShowError(true);
+                                    refreshTrainingData();
+                                }).catch(e => {
+                                    console.log(e);
+                                    setShowError(true);
+                                });
+                                
+                                setLevel(0);
+                                setRepeats(0);
+                                setTakes([]);
+                            }}>Add training</button>
+                        </div>
+
+                        <hr/>
+
+                        {/* training list */}
+                        {trainings.length == 0 ||
+                            <div>
+                                <h4>Trainings</h4>
+                                {
+                                trainings.map(training => 
+                                    {
+                                    const date = training.trainingDetails.dateTime;
+                                    console.log();
+                                    return (
+                                        <div key={training.trainingId} className="post wrapper" style={{marginBottom: "10px"}}>
+                                            <span>ID: <b>{training.trainingId}</b>,    </span>
+                                            <span>Time: <b>{new Date(date[0], date[1], date[2]).toLocaleDateString()}</b></span>
+                                            <br/>
+                                            <div className="m-2">
+                                                <h6>Takes:</h6>
+                                                <ul>
+                                                    {training.takes.map( (take, index) => 
+                                                        <li key={index}>
+                                                            <span>Level: {take.level}, </span>
+                                                            <span>Repeats: {take.repeats}</span> 
+                                                        </li>                                
+                                                    )}
+                                                </ul>
+                                            </div>
+                                            
+                                            <div>Perforamce: <b>{calculatePerformanceOfTraining(training)}</b></div>
+
+                                            <button onClick={() => {
+                                                deleteTraining({userId, exerciseId, trainingId: training.trainingId}).then(response => refreshTrainingData());
+                                                
+                                            }} className="btn btn-danger m-3">Delete</button>
+                                        </div>  
+                                    ) ;
+                                    }
+                                )
+                                }
+                            </div>
+                        }
                     </div>
-                    <button className="btn btn-success" onClick={() => setTakes(takes.concat([{level, repeats}]))}>Add take</button>
-                    <button className="btn btn-success" onClick={() => {
-                        createTraining({userId, exerciseId}, {
-                            trainingDetails: {
-                                dateTime: `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T00:00:00`,
-                            },
-                            takes: takes
-                        }).then(response => {
-                            if(response.status != 200) setShowError(true);
-                            refreshTrainingData();
-                        }).catch(e => {
-                            console.log(e);
-                            setShowError(true);
-                        });
-                        
-                        setLevel(0);
-                        setRepeats(0);
-                        setTakes([]);
-                    }}>Add training</button>
+                    
                 </div>
 
-                {/* training list */}
-                <div>
-                    {
-                    trainings.map(training => 
-                        {
-                        const date = training.trainingDetails.dateTime;
-                        console.log();
-                        return (
-                            <div key={training.trainingId}>
-                                <span>Training id: {training.trainingId} </span>
-                                <span>Time: {new Date(date[0], date[1], date[2]).toLocaleDateString()}</span>
-                                <br/>
-                                <span>Takes:</span>
-                                {training.takes.map( (take, index) => 
-                                    <div key={index}>
-                                        <div>Level: {take.level}</div>
-                                        <div>Repeats: {take.repeats}</div> 
-                                    </div>                                
-                                )}
-                                <span>Perforamce: {calculatePerformanceOfTraining(training)}</span>
-                                <button onClick={() => {
-                                    deleteTraining({userId, exerciseId, trainingId: training.trainingId}).then(response => refreshTrainingData());
-                                    
-                                }} className="btn btn-danger">Delete</button>
-                            </div>  
-                        ) ;
-                        }
-                    )
-                    }
-                </div>
                 
-                {/* training statistic */}
-                {trainings.length == 0 ||
-                    <div>
-                        <PerformanceGraph data={data}/>
-                    </div>
-                }
+                
+                
                 
 
                 

@@ -43,6 +43,15 @@
   margin: auto;
 }
 
+.block-component{
+  border-width: 3px;
+  border-style: ridge;
+  border-color: black;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 50px;
+}
+
 .post{
   background-color: #eee;
   border:#282c34;
