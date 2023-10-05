@@ -29,6 +29,8 @@ export default function FunctionPage(){
     //basic information
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [image, setImage] = useState("");
+
     const [authorId, setAuthorId] = useState(null);
     const [authorUsername, setAuthorUsername] = useState("");
 
@@ -54,6 +56,8 @@ export default function FunctionPage(){
                 //basic information:
                 setTitle(response.data.functionDetails.title);
                 setDescription(response.data.functionDetails.description);
+                setImage(response.data.functionDetails.image);
+
                 setAuthorId(response.data.author.userId);
                 setAuthorUsername(response.data.author.appUserDetails.username);
 
@@ -61,7 +65,7 @@ export default function FunctionPage(){
 
                 //get exercises related to the function of the user
                 retreiveExercisesForFunction(null, {userId, functionId}).then(response => {
-
+                    
                     setExercises(response);
                     return response;
                     
@@ -125,6 +129,26 @@ export default function FunctionPage(){
 
                                     <label for="description" className="m-2">Description</label>
                                     <input id="description" className="form-control" onChange={e => setDescription(e.target.value)} value={description}/>
+                                
+                                    <label className="m-2" htmlFor='image'> <b>Image</b> </label>
+                                    <input
+                                        className="form-control"
+                                        type="file"
+                                        id='image'
+                                        accept='.png, .jpg, .jpeg'
+                                        onChange={(e) => {
+                                            const fileReader = new FileReader();
+                                            
+                                            fileReader.onload = (event) => {
+                                                console.log("Here it is:");
+                                                console.log(event.target.result);
+                                                setImage(event.target.result);
+                                            };
+                                            
+                                            fileReader.readAsDataURL(e.target.files[0]);
+                                        }}
+                                    />
+                                    <img className="m-2" src={image}/>
                                 </div>
                                 <div className="m-3">
                                     <h5>Author</h5> 
@@ -138,12 +162,15 @@ export default function FunctionPage(){
                                     <h3>{title}</h3>
                                     <div className="m-2">ID: <b>{functionId}</b></div>
                                     <div className="m-2"><h5>Description:</h5> <p>{description}</p></div>
+                                    <div><b>Image</b></div>
+                                    <img className="m-2" src={image}/>
                                 </div>
                                 <div className="m-3">
                                     <h5>Author: </h5>
                                     <div className="m-2">ID: <b>{authorId}</b></div>
                                     <div className="m-2">Username: <b>{authorUsername}</b></div>
                                 </div>
+
                             </div>
                         }
                         
@@ -153,7 +180,7 @@ export default function FunctionPage(){
                             authorId == userId ?
                             <div>
                                 <button className="btn btn-success m-3" onClick={(e) => {
-                                    updateFunction({userId, functionId}, {title, description}).catch(e => {
+                                    updateFunction({userId, functionId}, {title, description, image}).catch(e => {
                                         setShowError(true);
                                         console.log(e);
                                     });
