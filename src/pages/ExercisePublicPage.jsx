@@ -15,6 +15,8 @@ export default function ExercisePublicPage(){
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [image, setImage] = useState("");
+
     const [authorId, setAuthorId] = useState(null);
     const [authorUsername, setAuthorUsername] = useState("");
     const [functions, setFunctions] = useState([]);
@@ -31,7 +33,7 @@ export default function ExercisePublicPage(){
                 setAuthorUsername(response.data.author.appUserDetails.username);
                 setFunctions(response.data.functionsIncluded);
                 setFunctionsPerformance(response.data.functionPerformance);
-
+                setImage(response.data.exerciseDetails.image);
             })
             .catch((e) => {
                 navigate("/");
@@ -57,6 +59,8 @@ export default function ExercisePublicPage(){
                     
                         <h5>Description</h5>
                         <p className="m-2">{description}</p>
+
+                        <img src={image}/>
                     </div>
 
                     <div className="m-2">

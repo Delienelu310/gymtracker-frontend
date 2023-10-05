@@ -11,11 +11,11 @@ export function retrievePublicFunctions(filteringResources){
 }
 
 export function retrieveFunctionsCreated(filteringResources, {userId}){
-    return apiClient.get(`/users/${userId}/functions/created`);
+    return apiClient.get(`/users/${userId}/functions/created`).then(response => response.data);
 }
 
 export function retrieveFunctionsFollowed(filteringResources, {userId}){
-    return apiClient.get(`/users/${userId}/functions/followed`);
+    return apiClient.get(`/users/${userId}/functions/followed`).then(response => response.data);
 }
 
 
