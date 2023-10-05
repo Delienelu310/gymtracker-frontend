@@ -32,6 +32,8 @@ export default function ExercisePage(){
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [image, setImage] = useState("");
+
     const [authorId, setAuthorId] = useState(null);
     const [authorUsername, setAuthorUsername] = useState("");
 
@@ -58,7 +60,7 @@ export default function ExercisePage(){
     const [data, setData] = useState([]);
 
     function refreshTrainingData(){
-        retrieveTrainingsForExercise({userId, exerciseId}).then(response => {
+        retrieveTrainingsForExercise({userId, exerciseId, image}).then(response => {
             console.log("Training data");
             console.log(response);
             if(response.status != 200){
@@ -88,6 +90,8 @@ export default function ExercisePage(){
 
                 setTitle(response.data.exerciseDetails.title);
                 setDescription(response.data.exerciseDetails.description);
+                setImage(response.data.exerciseDetails.image);
+
                 setAuthorId(response.data.author.userId);
                 setAuthorUsername(response.data.author.appUserDetails.username);
 
@@ -134,6 +138,26 @@ export default function ExercisePage(){
 
                                     <label className="m-2" for="description">Description: </label>
                                     <input className="form-control" id="description" onChange={e => setDescription(e.target.value)} value={description}/>
+                                
+                                    <label className="m-2" htmlFor='image'> <b>Image</b> </label>
+                                    <input
+                                        className="form-control"
+                                        type="file"
+                                        id='image'
+                                        accept='.png, .jpg, .jpeg'
+                                        onChange={(e) => {
+                                            const fileReader = new FileReader();
+                                            
+                                            fileReader.onload = (event) => {
+                                                console.log("Here it is:");
+                                                console.log(event.target.result);
+                                                setImage(event.target.result);
+                                            };
+                                            
+                                            fileReader.readAsDataURL(e.target.files[0]);
+                                        }}
+                                    />
+                                    <img className="m-2" src={image}/>
                                 </div>
                                 :
                                 <div>
@@ -152,6 +176,12 @@ export default function ExercisePage(){
                                         <br/>
                                         <b>{description}</b>
                                     </div>
+                                    <div>
+                                        Image:
+                                        <br/>
+                                        <img className="m-2" src={image}/>
+                                    </div>
+                                        
                                 </div>  
                             }
                             <div className="m-3">
@@ -172,7 +202,7 @@ export default function ExercisePage(){
                             authorId == userId ?
                             <div>
                                 <button className="btn btn-success m-3" onClick={() => {
-                                    updateExercise({userId, exerciseId}, {title, description}).catch( e => {
+                                    updateExercise({userId, exerciseId}, {title, description, image}).catch( e => {
                                         setShowError(true);
                                         console.log(e);
                                     });
