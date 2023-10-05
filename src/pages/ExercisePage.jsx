@@ -22,7 +22,10 @@ export default function ExercisePage(){
     //user in a form of graph for this user
 
     const {exerciseId} = useParams();
-    const {userId, role} = useAuth();
+    const auth = useAuth();
+    const userId = auth.userId;
+    const role = auth.role;
+    // const {userId, role} = useAuth();
 
     const [showError, setShowError] = useState(false);
     const navigate = useNavigate();
@@ -91,9 +94,11 @@ export default function ExercisePage(){
                 setPublished(response.data.published);
 
                 setFunctions(response.data.functionsIncluded);
-                console.log("Function performance inside:");
-                console.log(response.data.functionPerformance);
                 setFunctionPerformance(response.data.functionPerformance);
+
+                console.log("ROLE");
+                console.log(role);
+                console.log(auth);
 
             })
             .catch((e) => {
@@ -296,7 +301,7 @@ export default function ExercisePage(){
                     </div>
                 </div>
 
-                <div className="right-block" style={{marginTop: "20px"}}>
+                <div className="right-block wrapper" style={{marginTop: "20px"}}>
                     {/* training statistic */}
                     {trainings.length == 0 ||
                         <div className="block-component">

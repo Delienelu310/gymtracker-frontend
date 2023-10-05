@@ -49,11 +49,10 @@ export default function AuthProvider({children}){
                 setUsername(username);
                 setToken(jwtToken);
 
-                console.log("Jwt roles:");
                 const decodedToken = jwt_decode(jwtToken.substring(7));
-                console.log(decodedToken);
 
                 let roles = decodedToken.scope.split(" ");
+                console.log(roles);
                 if(roles.includes("ROLE_ADMIN"))
                     setRole("admin");
                 else if(roles.includes("ROLE_MODER"))

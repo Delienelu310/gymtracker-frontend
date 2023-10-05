@@ -30,7 +30,7 @@ export default function ExercisePublicPage(){
                 setAuthorId(response.data.author.userId);
                 setAuthorUsername(response.data.author.appUserDetails.username);
                 setFunctions(response.data.functionsIncluded);
-                setFunctionsPerformance(response.data.functionsPerformance);
+                setFunctionsPerformance(response.data.functionPerformance);
 
             })
             .catch((e) => {
@@ -49,54 +49,55 @@ export default function ExercisePublicPage(){
                 5. author*/
             }
             {showError && <div>Error</div>}
-            <div className="exerciseDetails">
-                <div>
-                    <span>Id: {exerciseId}</span>
-                    <br/>
-                    <span>Title: {title}</span>
-                    <br/>
-                    <span>Description: {description}</span>
-                </div>
+            <div className="exerciseDetails wrapper">
+                <div className="block-component">
+                    <div className="m-5">
+                        <h3 className="m-2">{title}</h3>
+                        <p className="m-2">Id: <b>{exerciseId}</b></p>
+                    
+                        <h5>Description</h5>
+                        <p className="m-2">{description}</p>
+                    </div>
 
-                <div>
-                    Author: 
-                    <br/>
-                    <span>Id: {authorId}</span>
-                    <br/>
-                    <span>Username: {authorUsername}</span>
+                    <div className="m-2">
+                        <h5>Author</h5>
+                        <p>Id: <b>{authorId}</b></p>
+                        <p>Username: <b>{authorUsername}</b></p>
+                    </div>
+                    
+                    {/* Make follow/unfollow based on the request */}
+                    {isAuthenticated &&
+                        <button className="btn btn-success m-3" onClick={() => {
+                            followExercise({userId, exerciseId}).then(response => {
+                                if(response.status != 200){
+                                    setShowError(true);
+                                    return;
+                                }
+                                setShowError(false);
+                            }).catch(e => {
+                                console.log(e);
+                                setShowError(true);
+                            });
+                        }}>Follow</button>
+                    }
+
                 </div>
 
                 {functions && functions.length > 0 && 
-                    <div>
-                        Functions included:
+                    <div className="block-component">
+                        <h4 className="m-2">Functions included</h4>
                         {functions.map(func => {
                             return (
-                            <div>
-                                <div>Id: {func.functionId}</div>
-                                <div>Title: {func.functionDetails.title}</div>
-                                <div>Performance: {functionsPerformance[func.functionId]}</div>
-                            </div>
+                                <div className="post" key={func.functionId} style={{marginBottom: "10px"}}>
+                                    <h5>{func.functionDetails.title}</h5>
+                                    <div className="m-2">ID: <b>{func.functionId}</b></div>
+                                    <div className="m-2">Performance: <b>{functionsPerformance[func.functionId]}</b></div>
+                                </div>
                             )
                         })}
                     </div>
                 }
-                {/* Make follow/unfollow based on the request */}
-                {isAuthenticated &&
-                    <button onClick={() => {
-                        followExercise({userId, exerciseId}).then(response => {
-                            if(response.status != 200){
-                                setShowError(true);
-                                return;
-                            }
-                            setShowError(false);
-                        }).catch(e => {
-                            console.log(e);
-                            setShowError(true);
-                        });
-                    }}>Follow</button>
-                }
-                
-                
+
             </div>
 
 

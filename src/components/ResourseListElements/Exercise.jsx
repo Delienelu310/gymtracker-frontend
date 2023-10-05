@@ -5,16 +5,12 @@ export default function Exercise({
 }){
     return (
         <div>
-            <div className="card mb-3">
-                <div className="card-body">
-                    <h2 className="h5">{resourse.exerciseDetails.title}</h2>
-                    <p className="small">ID: {resourse.exerciseId}</p>
-                    <p className="small">Author: {resourse.author.appUserDetails.username}</p>
-                    <p className="small">Author ID: {resourse.author.userId}</p>
-                    <Link to={`/exercises/${resourse.exerciseId}`} className="btn btn-primary btn-sm">
-                    Read more
-                    </Link>
-                </div>
+            <div className="post">
+                <h4>{resourse.exerciseDetails.title}</h4>
+                <p>ID: <b>{resourse.exerciseId}</b></p>
+                <p>Author: <b>{resourse.author.appUserDetails.username}</b></p>
+                <p>Author ID: <b>{resourse.author.userId}</b></p>
+                <Link to={`/exercises/${resourse.exerciseId}`} className="btn btn-primary m-3">Look</Link>
             </div>
         </div>
     );
