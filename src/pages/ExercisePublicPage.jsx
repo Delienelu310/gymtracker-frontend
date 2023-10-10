@@ -42,7 +42,7 @@ export default function ExercisePublicPage(){
     useEffect(setExerciseDetails, []);
 
     return (
-        <div>
+        <div >
             {/* what do we need? 
                 1. exercise details
                 2. number of followers
@@ -60,7 +60,7 @@ export default function ExercisePublicPage(){
                         <h5>Description</h5>
                         <p className="m-2">{description}</p>
 
-                        <img src={image}/>
+                        <img style={{borderRadius: "15px"}} src={image}/>
                     </div>
 
                     <div className="m-2">
@@ -71,7 +71,7 @@ export default function ExercisePublicPage(){
                     
                     {/* Make follow/unfollow based on the request */}
                     {isAuthenticated &&
-                        <button className="btn btn-success m-3" onClick={() => {
+                        <button style={{background: "#186A3B", width: "150px"}} className="btn btn-success m-3" onClick={() => {
                             followExercise({userId, exerciseId}).then(response => {
                                 if(response.status != 200){
                                     setShowError(true);

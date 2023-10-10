@@ -71,7 +71,7 @@ export default function ExerciseUpdate(){
 
 
                     <div>
-                        <button type="button" name="create" className='btn btn-success m-5' onClick={updateExer}>Create</button>
+                        <button style={{background: "#117A65"}} type="button" name="create" className='btn btn-success m-5' onClick={updateExer}>Create</button>
                     </div>
                 </div>
             </div>

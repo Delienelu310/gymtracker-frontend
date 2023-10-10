@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { calculatePerformanceOfTraining, prepareExerciseGraphData } from "../businessLogic/performanceCalculation";
@@ -149,15 +149,13 @@ export default function ExercisePage(){
                                             const fileReader = new FileReader();
                                             
                                             fileReader.onload = (event) => {
-                                                console.log("Here it is:");
-                                                console.log(event.target.result);
                                                 setImage(event.target.result);
                                             };
                                             
                                             fileReader.readAsDataURL(e.target.files[0]);
                                         }}
                                     />
-                                    <img className="m-2" src={image}/>
+                                    <img style={{borderRadius: "15px", width: "70%"}} className="m-5" src={image}/>
                                 </div>
                                 :
                                 <div>
@@ -179,7 +177,7 @@ export default function ExercisePage(){
                                     <div>
                                         Image:
                                         <br/>
-                                        <img className="m-2" src={image}/>
+                                        <img style={{borderRadius: "15px", width: "70%"}} className="m-5" src={image}/>
                                     </div>
                                         
                                 </div>  
@@ -201,13 +199,13 @@ export default function ExercisePage(){
                         {
                             authorId == userId ?
                             <div>
-                                <button className="btn btn-success m-3" onClick={() => {
+                                <button style={{width: "150px", background: "#145A32"}} className="btn btn-success m-3" onClick={() => {
                                     updateExercise({userId, exerciseId}, {title, description, image}).catch( e => {
                                         setShowError(true);
                                         console.log(e);
                                     });
                                 }}>Update</button>
-                                <button className="btn btn-danger m-3" onClick={() => {deleteExerciseById({userId: authorId, exerciseId}).then(
+                                <button style={{width: "150px", background: "#922B21"}} className="btn btn-danger m-3" onClick={() => {deleteExerciseById({userId: authorId, exerciseId}).then(
                                     (response) => {
                                         if(response.status === 200) navigate("/")
                                         setShowError(true);
@@ -220,7 +218,7 @@ export default function ExercisePage(){
                                 </button> 
                             </div>
                             :
-                            <button className="btn btn-danger m-3" onClick={() => {
+                            <button style={{width: "150px", background: "#922B21"}} className="btn btn-danger m-3" onClick={() => {
                                 unfollowExercise({userId, exerciseId}).then(response => {
                                     if(response.status == 200) navigate("/");
                                     setShowError(true);
@@ -235,9 +233,9 @@ export default function ExercisePage(){
                         {(role == "admin" || role == "moder") &&
                             <div>
                                 {published ?
-                                    <button className="btn btn-danger m-3" onClick={() => updateExerciseUnpublish({userId, exerciseId})}>Unpublish</button>
+                                    <button style={{width: "150px", background: "#922B21"}} className="btn btn-danger m-3" onClick={() => updateExerciseUnpublish({userId, exerciseId})}>Unpublish</button>
                                     :
-                                    <button className="btn btn-success m-3" onClick={() => updateExercisePublish({userId, exerciseId})}>Publish</button>
+                                    <button style={{width: "150px", background: "#145A32"}} className="btn btn-success m-3" onClick={() => updateExercisePublish({userId, exerciseId})}>Publish</button>
                                 }
                             </div>
                         }
@@ -256,7 +254,7 @@ export default function ExercisePage(){
                                 <label className="m-2" for="performance" >Performance desired:</label>
                                 <input className="form-control m-2" id="performance" onChange={(e)=> {setPerformance(e.target.value)}} value={performance} type="number" placeholder="performance"/>
 
-                                <button onClick={() => {
+                                <button style={{width: "150px", background: "#145A32"}} onClick={() => {
                                     if(!functions.map(func => func.functionId).includes(functionIdToAdd)){
                                         updateExerciseAddingFunction({userId: authorId, exerciseId, functionId: functionIdToAdd}).then(
                                             response => updateExerciseChangingPerformance({userId: authorId, exerciseId, functionId: functionIdToAdd, value: performance}).then(
@@ -284,40 +282,48 @@ export default function ExercisePage(){
                                     {functions.map(func => {
                                         return (
                                         <div key={func.functionId} className="post">
-                                            
-                                            <h4>{func.functionDetails.title}</h4>
-                                            <div>ID: {func.functionId}</div>
-                                            <div>Performance: <b>{functionPerformance[func.functionId]}</b></div>
-                                            {userId == authorId && (
-                                                <div>
-                                                    <input className="form-control m-2" onChange={(e) => {
-                                                        let functionPerformanceCopy = Object.assign({}, functionPerformance);
-                                                        functionPerformanceCopy[func.functionId] = e.target.value;
-                                                        setFunctionPerformance(functionPerformanceCopy);
-                                                    }} value={functionPerformance[func.functionId]} type="number"/>
-                                                    <button className="btn btn-success m-2" onClick={() => {
-                                                        updateExerciseChangingPerformance({userId, exerciseId, functionId: func.functionId, value: functionPerformance[func.functionId]}).then(
-                                                            response => setExerciseDetails()
-                                                        );
-                                                        
-                                                    }}>Edit</button>
-                                                </div>
-                                            )}
-                                            {userId == authorId && 
-                                                <button 
-                                                    onClick={
-                                                        () => {
-                                                            updateExerciseRemovingFunction({userId, exerciseId, functionId: func.functionId}).then(
-                                                                response => setExerciseDetails()
-                                                            );
+
+                                            <div style={{display: "inline-block", width: "75%"}}>
+                                                <h4>{func.functionDetails.title}</h4>
+                                                <div>ID: {func.functionId}</div>
+                                                <div>Performance: <b>{functionPerformance[func.functionId]}</b></div>
+                                                {userId == authorId && (
+                                                    <div>
+                                                        <input className="form-control m-2" onChange={(e) => {
+                                                            let functionPerformanceCopy = Object.assign({}, functionPerformance);
+                                                            functionPerformanceCopy[func.functionId] = e.target.value;
+                                                            setFunctionPerformance(functionPerformanceCopy);
+                                                        }} value={functionPerformance[func.functionId]} type="number"/>
+                                                        <button style={{width: "75px", background: "#145A32", display: "inline-block"}} 
+                                                            className="btn btn-success m-2" 
+                                                            onClick={() => {
+                                                                updateExerciseChangingPerformance({userId, exerciseId, functionId: func.functionId, value: functionPerformance[func.functionId]}).then(
+                                                                    response => setExerciseDetails()
+                                                                );
                                                             
-                                                        }
-                                                    }
-                                                    className="btn btn-danger"
-                                                >
-                                                    Remove
-                                                </button> 
-                                            }
+                                                        }}>Edit</button>
+                                                        <button 
+                                                            style={{width: "75px", background: "#922B21 ", display: "inline-block"}}
+                                                            onClick={
+                                                                () => {
+                                                                    updateExerciseRemovingFunction({userId, exerciseId, functionId: func.functionId}).then(
+                                                                        response => setExerciseDetails()
+                                                                    );
+                                                                    
+                                                                }
+                                                            }
+                                                            className="btn btn-danger"
+                                                        >
+                                                            Remove
+                                                        </button> 
+                                                    </div>
+                                                )}
+                            
+                                                <Link style={{width: "150px", background: "#2E86C1"}} to={`/private/functions/${func.functionId}`} className="btn btn-primary m-3">Look</Link>
+                                                
+                                            </div>
+                                            <img style={{display: "inline-block", width: "20%", float: "right", borderRadius: "15px", marginTop: "15px"}} src={func.functionDetails.image}/>
+                                            
                                             
                                         </div>
                                         )
@@ -369,11 +375,15 @@ export default function ExercisePage(){
                                             <br/>
                                             Repeats: <b>{take.repeats}</b>
                                             <br/>
-                                            <button onClick={() => {
-                                                let takesCopy = takes.slice();
-                                                takesCopy.splice(index, 1);
-                                                setTakes(takesCopy);
-                                            }} className="btn btn-danger m-1">Delete</button>
+                                            <button 
+                                                style={{width: "150px", background: "#922B21 "}}
+                                                onClick={() => {
+                                                    let takesCopy = takes.slice();
+                                                    takesCopy.splice(index, 1);
+                                                    setTakes(takesCopy);
+                                                }} 
+                                                className="btn btn-danger m-1"
+                                            >Delete</button>
                                         </div>
                                     ))}
                                 </div>
@@ -388,27 +398,32 @@ export default function ExercisePage(){
                                 <label for="repeats" className="m-2">Repeats</label>
                                 <input id="repeats" className="form-control m-2" type="number" value={repeats} onChange={(e) => setRepeats(e.target.value)}/>
 
-                                <button className="btn btn-success m-2" onClick={() => setTakes(takes.concat([{level, repeats}]))}>Add set</button>
+                                <button style={{width: "150px", background: "#145A32"}} 
+                                    className="btn btn-success m-2" onClick={() => setTakes(takes.concat([{level, repeats}]))}
+                                >Add set</button>
                             </div>
 
                             
-                            <button className="btn btn-success m-3" onClick={() => {
-                                createTraining({userId, exerciseId}, {
-                                    trainingDetails: {
-                                        dateTime: `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T00:00:00`,
-                                    },
-                                    takes: takes
-                                }).then(response => {
-                                    if(response.status != 200) setShowError(true);
-                                    refreshTrainingData();
-                                }).catch(e => {
-                                    console.log(e);
-                                    setShowError(true);
-                                });
-                                
-                                setLevel(0);
-                                setRepeats(0);
-                                setTakes([]);
+                            <button 
+                                style={{width: "150px", background: "#145A32"}}
+                                className="btn btn-success m-3" 
+                                onClick={() => {
+                                    createTraining({userId, exerciseId}, {
+                                        trainingDetails: {
+                                            dateTime: `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T00:00:00`,
+                                        },
+                                        takes: takes
+                                    }).then(response => {
+                                        if(response.status != 200) setShowError(true);
+                                        refreshTrainingData();
+                                    }).catch(e => {
+                                        console.log(e);
+                                        setShowError(true);
+                                    });
+                                    
+                                    setLevel(0);
+                                    setRepeats(0);
+                                    setTakes([]);
                             }}>Add training</button>
                         </div>
 
@@ -442,7 +457,7 @@ export default function ExercisePage(){
                                             
                                             <div>Perforamce: <b>{calculatePerformanceOfTraining(training)}</b></div>
 
-                                            <button onClick={() => {
+                                            <button style={{width: "150px", background: "#922B21"}} onClick={() => {
                                                 deleteTraining({userId, exerciseId, trainingId: training.trainingId}).then(response => refreshTrainingData());
                                                 
                                             }} className="btn btn-danger m-3">Delete</button>

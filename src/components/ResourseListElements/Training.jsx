@@ -26,7 +26,7 @@ export default function Training({resourse: training, refreshResourses}){
             <button onClick={() => {
                 deleteTraining({userId: training.userId, exerciseId: training.exerciseId, trainingId: training.trainingId})
                     .then(refreshResourses);
-            }} className="btn btn-danger m-3">Delete</button>
+            }} style={{width: "150px", background: "#922B21"}} className="btn btn-danger m-3">Delete</button>
         </div>
     );
 }

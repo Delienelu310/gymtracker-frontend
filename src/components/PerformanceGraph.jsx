@@ -33,7 +33,7 @@ export default function PerformanceGraph({data}){
     return (
         <div>
 
-            <div style={{width:"400px", height:"400px", display: "inline-block"}}>
+            <div className="m-5" style={{width:"400px", height:"400px", display: "inline-block", background: "white", borderRadius:"10px"}}>
                 <VictoryChart width={400} height={300} domain={{ x: domainX }}>
                     {data.map((oneline, index) => {
                         return (
@@ -86,6 +86,7 @@ export default function PerformanceGraph({data}){
                 <div>
                     <label>Min Date:</label>
                     <DatePicker
+                        className='form-control m-2'
                         selected={minDate}
                         onChange={(date) => setMinDate(date)}
                         dateFormat="yyyy-MM-dd" // Customize the date format
@@ -99,6 +100,7 @@ export default function PerformanceGraph({data}){
                 <div>
                     <label>Max Date:</label>
                     <DatePicker
+                        className='form-control m-2'
                         selected={maxDate}
                         onChange={(date) => setMaxDate(new Date(date))}
                         dateFormat="yyyy-MM-dd" // Customize the date format
@@ -109,7 +111,7 @@ export default function PerformanceGraph({data}){
                         onChange={(e) => setCustomDomainMax(new Date(e.target.value))}
                     /> */}
                 </div>
-                <button onClick={applyCustomDomain}>Apply dates</button>
+                <button style={{width: "150px", background: "#2E86C1"}} className="m-2 btn btn-primary" onClick={applyCustomDomain}>Apply dates</button>
             </div>
             
         </div>

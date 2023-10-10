@@ -124,10 +124,10 @@ export default function FunctionPage(){
                             <div className="">
                                 <div className="m-3">
                                     <div className="m-2">ID: <b>{functionId}</b></div>
-                                    <label for="title" className="m-2">Function title</label>
+                                    <label for="title" className="m-2"><b>Function title</b></label>
                                     <input id="title" className="form-control" onChange={e => setTitle(e.target.value)} value={title}/>
 
-                                    <label for="description" className="m-2">Description</label>
+                                    <label for="description" className="m-2"><b>Description</b></label>
                                     <input id="description" className="form-control" onChange={e => setDescription(e.target.value)} value={description}/>
                                 
                                     <label className="m-2" htmlFor='image'> <b>Image</b> </label>
@@ -148,7 +148,7 @@ export default function FunctionPage(){
                                             fileReader.readAsDataURL(e.target.files[0]);
                                         }}
                                     />
-                                    <img className="m-2" src={image}/>
+                                    <img style={{width: "50%", borderRadius: "10px"}} className="m-5" src={image}/>
                                 </div>
                                 <div className="m-3">
                                     <h5>Author</h5> 
@@ -163,7 +163,7 @@ export default function FunctionPage(){
                                     <div className="m-2">ID: <b>{functionId}</b></div>
                                     <div className="m-2"><h5>Description:</h5> <p>{description}</p></div>
                                     <div><b>Image</b></div>
-                                    <img className="m-2" src={image}/>
+                                    <img style={{borderRadius: "15px", width: "70%"}} className="m-5" src={image}/>
                                 </div>
                                 <div className="m-3">
                                     <h5>Author: </h5>
@@ -179,13 +179,13 @@ export default function FunctionPage(){
                         {
                             authorId == userId ?
                             <div>
-                                <button className="btn btn-success m-3" onClick={(e) => {
+                                <button style={{width: "150px", background: "#145A32"}} className="btn btn-success m-3" onClick={(e) => {
                                     updateFunction({userId, functionId}, {title, description, image}).catch(e => {
                                         setShowError(true);
                                         console.log(e);
                                     });
                                 }}>Update</button>
-                                <button className="btn btn-danger m-3" onClick={() => {deleteFunctionById({userId: authorId, functionId}).then(
+                                <button style={{width: "150px", background: "#922B21"}} className="btn btn-danger m-3" onClick={() => {deleteFunctionById({userId: authorId, functionId}).then(
                                     (response) => {
                                         if(response.status === 200) navigate("/")
                                         setShowError(true);
@@ -198,7 +198,7 @@ export default function FunctionPage(){
                                 </button> 
                             </div>
                             :
-                            <button className="btn btn-danger m-3" onClick={() => {
+                            <button style={{width: "150px", background: "#922B21"}} className="btn btn-danger m-3" onClick={() => {
                                 unfollowFunction({userId, functionId}).then(response => {
                                     if(response.status == 200) navigate("/");
                                     setShowError(true);
@@ -213,9 +213,9 @@ export default function FunctionPage(){
                         {(role == "admin" || role == "moder") &&
                             <div>
                                 {published ?
-                                    <button className="btn btn-danger m-3" onClick={() => updateFunctionUnpublish({userId, functionId})}>Unpublish</button>
+                                    <button style={{width: "150px", background: "#922B21"}} className="btn btn-danger m-3" onClick={() => updateFunctionUnpublish({userId, functionId})}>Unpublish</button>
                                     :
-                                    <button className="btn btn-success m-3" onClick={() => updateFunctionPublish({userId, functionId})}>Publish</button>
+                                    <button style={{width: "150px", background: "#145A32"}} className="btn btn-success m-3" onClick={() => updateFunctionPublish({userId, functionId})}>Publish</button>
                                 }
                             </div>
                         }

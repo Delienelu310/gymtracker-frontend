@@ -65,7 +65,7 @@ export default function FunctionUpdate(){
                 </div>
 
                 <div>
-                    <button type="button" name="update" className='btn btn-success m-5' onClick={updateFunc}>Update</button>
+                    <button style={{background: "#117A65"}} type="button" name="update" className='btn btn-success m-5' onClick={updateFunc}>Create</button>
                 </div>
 
             </div>

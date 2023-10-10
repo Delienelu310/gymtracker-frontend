@@ -1,17 +1,36 @@
 .App {
   text-align: center;
+  color: #FDEBD0;
+  
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body::before {
+  content: '';
+  background-image: url("/src/resources/background6.jpeg");
+  background-color: #282c34;
+  background-size: cover; /* Adjust the sizing as needed */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3; /* Send the image behind the content */
+  opacity: 0.7; /* Adjust the opacity of the image */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body::after{
+  content: '';
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2; /* Send the image behind the content */
 }
+
+
+
 
 .App-header {
   background-color: #282c34;
@@ -24,41 +43,21 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
 .wrapper{
   width: 50%;
   margin: auto;
 }
 
 .block-component{
-  border-width: 3px;
-  border-style: ridge;
-  border-color: black;
+  background-color: #34495E;
   border-radius: 10px;
   padding: 20px;
   margin: 20px 50px;
 }
 
 .post{
-  background-color: #eee;
-  border:#282c34;
-  border-style: ridge;
-  border-width: 3px;
+  background-color: #34495E;
   border-radius: 20px;
   padding:3%;
   margin-bottom: 20px;
-
 }

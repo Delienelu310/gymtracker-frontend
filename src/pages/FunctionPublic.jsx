@@ -43,25 +43,26 @@ export default function FunctionPublic(){
     return (
         <div>
             {showError && <div>Error</div>}
-            <div className="functionDetails">
-                <h3 className="m-2">{title}</h3>
-                <div className="m-2">ID: <b>{functionId}</b></div>
-                <div className="m-2">Description: <p>{description}</p></div>
-                <img src={image} className="m-3"/>
+            <div className="functionDetails wrapper">
+                <div className="block-component">
+                    <h3 className="m-2">{title}</h3>
+                    <div className="m-2">ID: <b>{functionId}</b></div>
+                    <div className="m-2"><h5>Description: </h5><p>{description}</p></div>
+                    <img style={{borderRadius: "15px"}} src={image} className="m-3"/>
 
-                <div className="m-3">
-                    <h5>Author</h5>
-                    <div className="m-1">Id: <b>{authorId}</b></div>
-                    <div>Username: <b>{authorUsername}</b></div>
+                    <div className="m-3">
+                        <h5>Author</h5>
+                        <div className="m-1">Id: <b>{authorId}</b></div>
+                        <div>Username: <b>{authorUsername}</b></div>
+                    </div>
+
+                    {isAuthenticated &&
+                        <button style={{background: "#186A3B", width: "150px"}} className="btn btn-success m-3" onClick={() => {
+                            followFunction({userId, functionId}).then(response => console.log(response))
+                                .catch(e => console.log(e));
+                        }}>Follow</button>
+                    }
                 </div>
-
-                {isAuthenticated &&
-                    <button className="btn btn-success m-3" onClick={() => {
-                        followFunction({userId, functionId}).then(response => console.log(response))
-                            .catch(e => console.log(e));
-                    }}>Follow</button>
-                }
-                
             </div>
 
 
