@@ -93,9 +93,13 @@ export default function ExercisePublicPage(){
                         {functions.map(func => {
                             return (
                                 <div className="post" key={func.functionId} style={{marginBottom: "10px"}}>
-                                    <h5>{func.functionDetails.title}</h5>
-                                    <div className="m-2">ID: <b>{func.functionId}</b></div>
-                                    <div className="m-2">Performance: <b>{functionsPerformance[func.functionId]}</b></div>
+                                    <div style={{display: "inline-block", width:"60%"}}>
+                                        <h5>{func.functionDetails.title} - <b>{func.functionId}</b></h5>
+                                        <div className="m-2">Performance: <b>{functionsPerformance[func.functionId]}</b></div>
+                                    </div>
+                                    <img style={{float:"right", width:"20%", display:"inline-block", borderRadius:"15px"}} src={
+                                        func.functionDetails.image
+                                    }/>
                                 </div>
                             )
                         })}

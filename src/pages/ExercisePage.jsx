@@ -159,22 +159,22 @@ export default function ExercisePage(){
                                 </div>
                                 :
                                 <div>
-                                    <div>
+                                    <div className="m-2">
                                         ID: 
                                         <br/>
                                         <b>{exerciseId}</b>
                                     </div>
-                                    <div>
+                                    <div className="m-2">
                                         Title: 
                                         <br/>
                                         <b>{title}</b>
                                     </div>
-                                    <div>
+                                    <div className="m-2">
                                         Description: 
                                         <br/>
                                         <b>{description}</b>
                                     </div>
-                                    <div>
+                                    <div className="m-2">
                                         Image:
                                         <br/>
                                         <img style={{borderRadius: "15px", width: "70%"}} className="m-5" src={image}/>
@@ -244,6 +244,7 @@ export default function ExercisePage(){
                     
                     {/* adding function */}
                     <div className="block-component">
+                        <h4 className="m-3">Functions</h4>
                         {userId == authorId &&
                             <div className="wrapper">
                                 <h4 className="m-2">Connect function: </h4>

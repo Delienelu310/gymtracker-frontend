@@ -39,6 +39,10 @@ export function retrieveExercisesAll(filteringResources, {userId}){
     })));
 }
 
+export function retrievePublicExercisesForFunction(filteringResources, {functionId}){
+    return apiClient.get(`/public/functions/${functionId}/exercises`).then(response => response.data);
+}
+
 //not sure if needed this exact function
 export function retreiveExercisesForFunction(filteringResources, {userId, functionId}){
     return apiClient.get(`/users/${userId}/exercises/function/${functionId}`).then(response => response.data);

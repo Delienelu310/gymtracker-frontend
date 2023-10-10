@@ -83,6 +83,7 @@ export default function PerformanceGraph({data}){
             </div>
 
             <div style={{display: "inline-block"}}>
+                <h5>Choose time range:</h5>
                 <div>
                     <label>Min Date:</label>
                     <DatePicker

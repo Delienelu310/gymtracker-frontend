@@ -61,7 +61,7 @@ export default function ResourceList({
                         if(!searchFilterFunction) return true;
                         return searchFilterFunction(resourse, searchQuery);
                     })
-                    .map((resourse, index) => {                 
+                    .map((resourse, index) => {            
                         return (
                             <ResourseWrapper key={index} resourse={resourse}></ResourseWrapper>
                         );

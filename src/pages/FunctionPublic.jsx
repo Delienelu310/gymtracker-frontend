@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../security/AuthContext";
 import { followFunction } from "../api/UserApiService";
+import { retrievePublicExercisesForFunction } from "../api/ExerciseApiService";
+import ResourceList from "../components/ResourceList";
+import Exercise from "../components/ResourseListElements/Exercise";
 
 export default function FunctionPublic(){
 
@@ -18,6 +21,8 @@ export default function FunctionPublic(){
     const [authorId, setAuthorId] = useState(null);
     const [authorUsername, setAuthorUsername] = useState("");
 
+    const [relatedExercises, setRelatedExercises] = useState([]);
+
     function setFunctionDetails(){
         retrievePublicFunctionById({functionId})
             .then((response) => {
@@ -28,6 +33,16 @@ export default function FunctionPublic(){
                 setImage(response.data.functionDetails.image);
                 setAuthorId(response.data.author.userId);
                 setAuthorUsername(response.data.author.appUserDetails.username);
+
+                retrievePublicExercisesForFunction(null, {functionId})
+                    .then(response => {
+                        console.log(response);
+                        setRelatedExercises(response);
+                    })
+                    .catch(e => {
+                        console.log(e)
+                        setShowError(true);
+                    });
             })
             .catch((e) => {
                 console.log(e);
@@ -62,6 +77,19 @@ export default function FunctionPublic(){
                                 .catch(e => console.log(e));
                         }}>Follow</button>
                     }
+
+                </div>
+
+                {/* useful public exercises */}
+                <div className="block-component">
+                    <ResourceList
+                        key={"public_exercises_list"}
+                        retrieveResourses={() => new Promise((resolve) => resolve(relatedExercises))}
+                        ResourseWrapper={Exercise}
+                        searchFilterFunction={(resourse, query) => {
+                            return resourse.exerciseDetails.title.startsWith(query);
+                        }}
+                    />
                 </div>
             </div>
 

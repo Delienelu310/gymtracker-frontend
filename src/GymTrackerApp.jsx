@@ -30,6 +30,7 @@ import ExercisePage from './pages/ExercisePage';
 import FunctionPage from './pages/FunctionPage';
 import Account from './pages/Account';
 import FunctionPrivate from './components/ResourseListElements/FunctionPrivate';
+import { WelcomePage } from './pages/WelcomePage';
 
 function AuthenticatedRoute({children}){
 
@@ -49,15 +50,7 @@ export default function GymTrackerApp(){
                 <Routes>
                     
                     <Route path="/" element={
-                        <div className='wrapper'>
-                            <ResourceList
-                                retrieveResourses={retrievePublicExercises}
-                                searchFilterFunction={(resourse, query) => {
-                                    return resourse.exerciseDetails.title.startsWith(query);
-                                }}
-                                ResourseWrapper={Exercise}
-                            />
-                        </div>
+                            <WelcomePage/>
                         }
                     />
                     <Route path="/register" element={
