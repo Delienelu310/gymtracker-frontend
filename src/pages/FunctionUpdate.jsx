@@ -1,11 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
 import { useState } from "react";
 import { createFunction } from "../api/FunctionApiService";
+import { addFunctionToGroup, getFunctionByTitle } from "../api/FunctionGroupsApi";
 
 export default function FunctionUpdate(){
 
     const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+    const params = useParams();
 
     const {userId} = useAuth();
 
@@ -22,9 +25,20 @@ export default function FunctionUpdate(){
                 if(response.status != 200) 
                     setShowErrorMessage(true);
             }).then(response => {
-                navigate("/private/functions");
+                if(params.functionGroupId != undefined){
+                    getFunctionByTitle({userId, title}).then(response => {
+                        return addFunctionToGroup({userId, functionId: response.data.functionId, functionGroupId: params.functionGroupId})
+                    }).then(response => 
+                        navigate("/private/functions")
+                    ).catch(error => console.log(error)); 
+                }else{
+                    navigate("/private/functions");
+                }
             })
-            .catch(e => setShowErrorMessage(true));
+            .catch(e => {
+                console.log(e);
+                setShowErrorMessage(true)
+            });
     }
 
     return (

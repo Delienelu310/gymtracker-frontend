@@ -69,6 +69,8 @@ export default function AuthProvider({children}){
                 console.log(jwtToken + ' ' + userId);
                 //getting id
                 let userDetails = await apiClient.get(`/users/username/${username}`);
+                console.log("User details:");
+                console.log(userDetails);
                 setUserId(userDetails.data.userId);
 
                 return true;

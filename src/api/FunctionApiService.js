@@ -20,7 +20,6 @@ export function retrieveFunctionsFollowed(filteringResources, {userId}){
 
 
 export function retrieveFunctionsAll(filteringResources, {userId}){
-    console.log("User id: " + userId);
     return apiClient.get(`/users/${userId}/functions`).then(response => response.data);
 }
 

@@ -1,11 +1,21 @@
 import { Link } from "react-router-dom";
 import {Navbar, Nav, NavDropdown} from "react-bootstrap"
 import { useAuth } from "../security/AuthContext";
+import { useEffect, useState } from "react";
+import { getFunctionGroupsFromWebmoderator } from "../api/FunctionGroupsApi";
 
 
 export default function Header(){
 
     const authContext = useAuth();
+
+    const [groups, setGroups] = useState([]);
+
+    useEffect(() => {
+        getFunctionGroupsFromWebmoderator().then(groups => {
+            setGroups(groups);    
+        });
+    }, []);
 
     return (
 
@@ -23,7 +33,26 @@ export default function Header(){
                             <NavDropdown.Item as={Link} to="/create/exercise">Create new Exercise</NavDropdown.Item>
                         </>}
                     </NavDropdown>
-                    <NavDropdown title="Functions" id="functions-dropdown">
+
+                    {/* Separate for each fucntnion groups */}
+                    {groups.map(group => {
+                        const title = group.functionGroupDetails.title;
+                        const id = group.functionGroupId;
+                        return (
+                            <NavDropdown title={title} id="functions-dropdown">
+                                <NavDropdown.Item as={Link} to={`/functiongroups/${id}/functions`}>Public {title}</NavDropdown.Item>
+                                {authContext.isAuthenticated && <>
+                                    <NavDropdown.Item as={Link} to={`/private/functiongroups/${id}/functions`}>All Private {title}</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to={`/private/functiongroups/${id}/functions/created`}>Created {title}</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to={`/private/functiongroups/${id}/functions/followed`}>Followed {title}</NavDropdown.Item>
+                                    <NavDropdown.Item as={Link} to={`/create/function/functiongroup/${id}`}>Create new {title}</NavDropdown.Item>
+                                </>}
+                            </NavDropdown>
+                        )
+                        
+                    })}
+
+                    <NavDropdown title="All Functions" id="functions-dropdown">
                         <NavDropdown.Item as={Link} to="/functions">Public Functions</NavDropdown.Item>
                         {authContext.isAuthenticated && <>
                             <NavDropdown.Item as={Link} to="/private/functions">All Private Functions</NavDropdown.Item>

@@ -28,6 +28,7 @@ export default function ResourceList({
         retrieveResourses(filteringResourses, {userId: auth.userId})
             .then((response) => {
                 setResourses(response);
+                console.log(response);
             })
             .catch(error => {
                 console.log(error);

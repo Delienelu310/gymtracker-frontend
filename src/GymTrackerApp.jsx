@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
 
 //special
 import { useAuth } from './security/AuthContext';
@@ -31,6 +31,9 @@ import FunctionPage from './pages/FunctionPage';
 import Account from './pages/Account';
 import FunctionPrivate from './components/ResourseListElements/FunctionPrivate';
 import { WelcomePage } from './pages/WelcomePage';
+import { getFunctionGroupsFromWebmoderator, getPrivateCreatedFunctionOfGroup, getPrivateFollowedFunctionOfGroup, getPrivateFunctionsOfGroup, getPublicFunctionOfGroup } from './api/FunctionGroupsApi';
+import { useEffect, useState } from 'react';
+import ResourseListGroupWrapper from './components/ResourseListGroupWrapper';
 
 function AuthenticatedRoute({children}){
 
@@ -41,6 +44,7 @@ function AuthenticatedRoute({children}){
 }
 
 export default function GymTrackerApp(){
+
     return (
         <div className='gymtracker_app'>
         <AuthProvider>
@@ -159,6 +163,19 @@ export default function GymTrackerApp(){
                         
                     }/>
 
+                    <Route path="/functiongroups/:functionGroupId/functions" element={
+                        <div className='wrapper'>
+                            <ResourseListGroupWrapper
+                                key={"public_functiongroup_list"}
+                                retrieveResourses={getPublicFunctionOfGroup}
+                                ResourseWrapper={Function}
+                                searchFilterFunction={(resourse, query) => {
+                                    return resourse.functionDetails.title.startsWith(query);
+                                }}
+                            />
+                        </div>
+                    }/>
+
                     <Route path="/private/functions" element={
                         <AuthenticatedRoute>
                             <div className='wrapper'>
@@ -171,8 +188,24 @@ export default function GymTrackerApp(){
                                     }}
                                 />
                             </div>
-                            
                         </AuthenticatedRoute>
+                    }/>
+
+                    <Route path="/private/functiongroups/:functionGroupId/functions" element={
+                        <AuthenticatedRoute>
+                            <div className='wrapper'>
+                                
+                                <ResourseListGroupWrapper
+                                    key={"private_functiongroup_list"}
+                                    retrieveResourses={getPrivateFunctionsOfGroup}
+                                    ResourseWrapper={Function}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.functionDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                        </AuthenticatedRoute>
+                        
                     }/>
 
                     <Route path="/private/functions/created" element={
@@ -191,6 +224,22 @@ export default function GymTrackerApp(){
                         </AuthenticatedRoute>
                     }/>
 
+                    <Route path="/private/functiongroups/:functionGroupId/functions/created" element={
+                        <AuthenticatedRoute>
+                            <div className='wrapper'>
+                                <ResourseListGroupWrapper
+                                    key={"private_functiongroup_list_created"}
+                                    retrieveResourses={getPrivateCreatedFunctionOfGroup}
+                                    ResourseWrapper={Function}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.functionDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                        </AuthenticatedRoute>
+                        
+                    }/>
+
                     <Route path="/private/functions/followed" element={
                         <AuthenticatedRoute>
                             <div className='wrapper'>
@@ -206,6 +255,24 @@ export default function GymTrackerApp(){
                             
                         </AuthenticatedRoute>
                     }/>
+
+                    <Route path="/private/functiongroups/:functionGroupId/functions/followed" element={
+                        <AuthenticatedRoute>
+                            <div className='wrapper'>
+                                <ResourseListGroupWrapper
+                                    key={"private_functiongroup_list_created"}
+                                    retrieveResourses={getPrivateFollowedFunctionOfGroup}
+                                    ResourseWrapper={Function}
+                                    searchFilterFunction={(resourse, query) => {
+                                        return resourse.functionDetails.title.startsWith(query);
+                                    }}
+                                />
+                            </div>
+                        </AuthenticatedRoute>
+                        
+                    }/>
+
+                    
 
                     {/* exercise pages */}
 
@@ -244,6 +311,12 @@ export default function GymTrackerApp(){
                         </AuthenticatedRoute>
                     }/>
                     <Route path="/create/function" element={
+                        <AuthenticatedRoute>
+                            <FunctionUpdate/>
+                        </AuthenticatedRoute>
+                    }/>
+
+                    <Route path="/create/function/functiongroup/:functionGroupId" element={
                         <AuthenticatedRoute>
                             <FunctionUpdate/>
                         </AuthenticatedRoute>
