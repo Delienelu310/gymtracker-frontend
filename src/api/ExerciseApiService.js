@@ -81,8 +81,7 @@ export function updateExerciseRemovingFunction({userId, exerciseId, functionId})
 export function updateExerciseChangingPerformance({userId, exerciseId, functionId, value}){
     return apiClient.put(`/users/${userId}/exercises/${exerciseId}/functions/${functionId}/set/${value}`).then(
         response => {
-            console.log("Updating performance");
-            console.log(response);
+
             return response;
         }
     );

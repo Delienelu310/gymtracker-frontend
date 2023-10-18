@@ -55,8 +55,7 @@ export default function ExerciseUpdate(){
                                 const fileReader = new FileReader();
                                 
                                 fileReader.onload = (event) => {
-                                    console.log("Here it is:");
-                                    console.log(event.target.result);
+
                                     setImg(event.target.result);
                                 };
                                 

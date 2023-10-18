@@ -26,7 +26,7 @@ export function deleteAllTrainingsForUser(userId){
 }
 
 export function createTraining({userId, exerciseId}, training){
-    console.log(training);
+
     return apiClient.post(`/users/${userId}/exercises/${exerciseId}/trainings`, training);
 }
 

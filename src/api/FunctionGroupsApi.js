@@ -4,7 +4,7 @@ export function getFunctionGroupsFromWebmoderator(){
     return apiClient.get(`public/functiongroups`)
         .then(groups => {
             if(groups.status != 200){
-                console.log(groups);
+
             }else{
                 return groups.data.filter(group => {
                     return group.author.appUserDetails.username == 'web_moderator';

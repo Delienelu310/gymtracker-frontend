@@ -64,7 +64,7 @@ export default function FunctionUpdate(){
                             const fileReader = new FileReader();
                             
                             fileReader.onload = (event) => {
-                                console.log("Here it is:");
+                                ("Here it is:");
                                 console.log(event.target.result);
                                 setImg(event.target.result);
                             };

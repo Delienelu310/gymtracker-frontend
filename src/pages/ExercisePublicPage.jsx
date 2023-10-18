@@ -25,7 +25,7 @@ export default function ExercisePublicPage(){
     function setExerciseDetails(){
         retrievePublicExerciseById({exerciseId})
             .then((response) => {
-                console.log(response);
+
                 if(response.status != 200) navigate("/");
                 setTitle(response.data.exerciseDetails.title);
                 setDescription(response.data.exerciseDetails.description);

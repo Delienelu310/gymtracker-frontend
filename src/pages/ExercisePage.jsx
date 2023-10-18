@@ -61,8 +61,7 @@ export default function ExercisePage(){
 
     function refreshTrainingData(){
         retrieveTrainingsForExercise({userId, exerciseId, image}).then(response => {
-            console.log("Training data");
-            console.log(response);
+
             if(response.status != 200){
                 setTrainings([]);
                 setShowError(true);
@@ -72,7 +71,7 @@ export default function ExercisePage(){
 
             setTrainings(response.data);
             setData(prepareExerciseGraphData(response.data));
-            console.log(data);
+
 
         }).catch(error => {
             console.log(error);
@@ -84,8 +83,7 @@ export default function ExercisePage(){
     function setExerciseDetails(){
         retrievePrivateExerciseById({userId, exerciseId})
             .then((response) => {
-                console.log("Exercise details:");
-                console.log(response);
+
                 if(response.status != 200) navigate("/");
 
                 setTitle(response.data.exerciseDetails.title);
@@ -99,10 +97,6 @@ export default function ExercisePage(){
 
                 setFunctions(response.data.functionsIncluded);
                 setFunctionPerformance(response.data.functionPerformance);
-
-                console.log("ROLE");
-                console.log(role);
-                console.log(auth);
 
             })
             .catch((e) => {
@@ -438,7 +432,7 @@ export default function ExercisePage(){
                                 trainings.map(training => 
                                     {
                                     const date = training.trainingDetails.dateTime;
-                                    console.log();
+
                                     return (
                                         <div key={training.trainingId} className="post wrapper" style={{marginBottom: "10px"}}>
                                             <span>ID: <b>{training.trainingId}</b>,    </span>

@@ -49,8 +49,7 @@ export default function FunctionPage(){
     function setFunctionDetails(){
         retrievePrivateFunctionById({userId, functionId})
             .then((response) => {
-                console.log("Function details:");
-                console.log(response);
+
                 if(response.status != 200) navigate("/");
 
                 //basic information:
@@ -140,8 +139,7 @@ export default function FunctionPage(){
                                             const fileReader = new FileReader();
                                             
                                             fileReader.onload = (event) => {
-                                                console.log("Here it is:");
-                                                console.log(event.target.result);
+
                                                 setImage(event.target.result);
                                             };
                                             
@@ -265,7 +263,7 @@ export default function FunctionPage(){
                                     );
                                 }}
                                 searchFilterFunction={(resourse, query)=>{
-                                    console.log(resourse);
+
                                     return String(resourse.trainingId).startsWith(query);
                                 }}
                             />

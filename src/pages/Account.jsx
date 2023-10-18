@@ -35,8 +35,7 @@ export default function Account(){
     function setUserDetails(){
         retrievePrivateUserById({userId})
             .then((response) => {
-                console.log("User details:");
-                console.log(response);
+
                 if(response.status != 200) navigate("/");
 
                 //basic information:

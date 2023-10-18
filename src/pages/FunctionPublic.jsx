@@ -26,7 +26,7 @@ export default function FunctionPublic(){
     function setFunctionDetails(){
         retrievePublicFunctionById({functionId})
             .then((response) => {
-                console.log(response);
+
                 if(response.status != 200) navigate("/");
                 setTitle(response.data.functionDetails.title);
                 setDescription(response.data.functionDetails.description);
@@ -36,7 +36,7 @@ export default function FunctionPublic(){
 
                 retrievePublicExercisesForFunction(null, {functionId})
                     .then(response => {
-                        console.log(response);
+
                         setRelatedExercises(response);
                     })
                     .catch(e => {
@@ -73,7 +73,7 @@ export default function FunctionPublic(){
 
                     {isAuthenticated &&
                         <button style={{background: "#186A3B", width: "150px"}} className="btn btn-success m-3" onClick={() => {
-                            followFunction({userId, functionId}).then(response => console.log(response))
+                            followFunction({userId, functionId}).then(response => (response))
                                 .catch(e => console.log(e));
                         }}>Follow</button>
                     }

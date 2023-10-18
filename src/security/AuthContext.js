@@ -41,9 +41,9 @@ export default function AuthProvider({children}){
         
         try{
             const reponse = await authenticate(username, password);
-            console.log(1);
+
             if(reponse.status == 200){
-                console.log(reponse);
+ 
                 const jwtToken = "Bearer " + reponse.data.token;
                 setAuthenticated(true);
                 setUsername(username);
@@ -52,7 +52,7 @@ export default function AuthProvider({children}){
                 const decodedToken = jwt_decode(jwtToken.substring(7));
 
                 let roles = decodedToken.scope.split(" ");
-                console.log(roles);
+
                 if(roles.includes("ROLE_ADMIN"))
                     setRole("admin");
                 else if(roles.includes("ROLE_MODER"))
@@ -65,12 +65,10 @@ export default function AuthProvider({children}){
                     return config;
                 }));
 
-                console.log(apiClient.interceptors);
-                console.log(jwtToken + ' ' + userId);
+
                 //getting id
                 let userDetails = await apiClient.get(`/users/username/${username}`);
-                console.log("User details:");
-                console.log(userDetails);
+
                 setUserId(userDetails.data.userId);
 
                 return true;
@@ -95,12 +93,10 @@ export default function AuthProvider({children}){
         setToken(null);
         setRole(null);
 
-        console.log(requestInjector);
+
         apiClient.interceptors.request.eject(requestInjector);
         setRequestInjector(null);
 
-        console.log("Interceptors after logout");
-        console.log(apiClient.interceptors);
     }
 
     return (

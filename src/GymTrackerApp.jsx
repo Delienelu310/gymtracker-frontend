@@ -175,7 +175,6 @@ export default function GymTrackerApp(){
                                 retrieveResourses={getPublicFunctionOfGroup}
                                 ResourseWrapper={Function}
                                 searchFilterFunction={(resourse, query) => {
-                                    console.log(resourse);
                                     return resourse.functionDetails.title.startsWith(query);
                                 }}
                             />
