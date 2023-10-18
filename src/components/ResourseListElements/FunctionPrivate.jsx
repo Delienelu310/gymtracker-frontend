@@ -12,7 +12,7 @@ export default function FunctionPrivate({resourse}){
                 <Link style={{width: "150px", background: "#2E86C1"}} to={`/private/functions/${resourse.functionId}`} className="btn btn-primary m-3">Look</Link>
             </div>
             {image && 
-                <img src={resourse.functionDetails.image} style={{display:"inline-block", borderRadius:"10px", "marginTop":"15px", width:"25%", float:"right"}}/>        
+                <img height={150} src={resourse.functionDetails.image} style={{display:"inline-block", position: "relative", borderRadius:"10px", "marginTop":"15px", width:"20%", float:"right"}}/>        
             }
         </div>
     );

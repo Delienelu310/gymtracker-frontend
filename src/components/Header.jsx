@@ -66,6 +66,7 @@ export default function Header(){
                 </Nav>
             </Navbar.Collapse>
             <Nav className="mr-auto">
+                <Nav.Link as={Link} to="/help">Help</Nav.Link>
                 {authContext.isAuthenticated || <Nav.Link as={Link} to="/login">Login</Nav.Link>}
                 {authContext.isAuthenticated || <Nav.Link as={Link} to="/register">Register</Nav.Link>}
                 {authContext.isAuthenticated && <Nav.Link as={Link} to="/" onClick={() => { authContext.logout()}}>Logout</Nav.Link>}

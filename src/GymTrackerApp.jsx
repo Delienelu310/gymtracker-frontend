@@ -34,6 +34,7 @@ import { WelcomePage } from './pages/WelcomePage';
 import { getFunctionGroupsFromWebmoderator, getPrivateCreatedFunctionOfGroup, getPrivateFollowedFunctionOfGroup, getPrivateFunctionsOfGroup, getPublicFunctionOfGroup } from './api/FunctionGroupsApi';
 import { useEffect, useState } from 'react';
 import ResourseListGroupWrapper from './components/ResourseListGroupWrapper';
+import { HelpPage } from './pages/HelpPage';
 
 function AuthenticatedRoute({children}){
 
@@ -54,9 +55,13 @@ export default function GymTrackerApp(){
                 <Routes>
                     
                     <Route path="/" element={
-                            <WelcomePage/>
-                        }
-                    />
+                        <WelcomePage/>
+                    }/>
+
+                    <Route path="/help" element={
+                        <HelpPage/>
+                    }/>
+
                     <Route path="/register" element={
                         <Registration/>
                     }/>
@@ -170,6 +175,7 @@ export default function GymTrackerApp(){
                                 retrieveResourses={getPublicFunctionOfGroup}
                                 ResourseWrapper={Function}
                                 searchFilterFunction={(resourse, query) => {
+                                    console.log(resourse);
                                     return resourse.functionDetails.title.startsWith(query);
                                 }}
                             />
@@ -198,7 +204,7 @@ export default function GymTrackerApp(){
                                 <ResourseListGroupWrapper
                                     key={"private_functiongroup_list"}
                                     retrieveResourses={getPrivateFunctionsOfGroup}
-                                    ResourseWrapper={Function}
+                                    ResourseWrapper={FunctionPrivate}
                                     searchFilterFunction={(resourse, query) => {
                                         return resourse.functionDetails.title.startsWith(query);
                                     }}
@@ -230,7 +236,7 @@ export default function GymTrackerApp(){
                                 <ResourseListGroupWrapper
                                     key={"private_functiongroup_list_created"}
                                     retrieveResourses={getPrivateCreatedFunctionOfGroup}
-                                    ResourseWrapper={Function}
+                                    ResourseWrapper={FunctionPrivate}
                                     searchFilterFunction={(resourse, query) => {
                                         return resourse.functionDetails.title.startsWith(query);
                                     }}
@@ -262,7 +268,7 @@ export default function GymTrackerApp(){
                                 <ResourseListGroupWrapper
                                     key={"private_functiongroup_list_created"}
                                     retrieveResourses={getPrivateFollowedFunctionOfGroup}
-                                    ResourseWrapper={Function}
+                                    ResourseWrapper={FunctionPrivate}
                                     searchFilterFunction={(resourse, query) => {
                                         return resourse.functionDetails.title.startsWith(query);
                                     }}
@@ -322,7 +328,6 @@ export default function GymTrackerApp(){
                         </AuthenticatedRoute>
                     }/>
                     
-
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
