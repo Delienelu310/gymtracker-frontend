@@ -83,8 +83,8 @@ export default function Account(){
                         <b>{userId}</b>
                     </div>
 
-                    <label for="username" className="p-2">Username: </label>
-                    <input type="text" class="form-control" id="username"  onChange={(e) => setUsername(e.target.value)} value={username}/>
+                    <h5  className="p-2">Username: </h5>
+                    <p>{username}</p>
 
                     <label for="email" className="p-2">Email: </label>
                     <input type="email" className="form-control" id="email" onChange={e => setEmail(e.target.value)} value={email}/>

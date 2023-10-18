@@ -1,9 +1,10 @@
 import { useAuth } from "../security/AuthContext"
-
+import { Link, useNavigate } from "react-router-dom";
 
 export function WelcomePage(){
 
-    const {isAuthenticated, username, userId} = useAuth();
+    const {isAuthenticated, username, userId, login} = useAuth();
+    const navigate = useNavigate();
 
     return (
         <div style={{
@@ -15,44 +16,34 @@ export function WelcomePage(){
 
             <h4 style={{color: "#7FB3D5"}}>What you can do on this page?</h4>
             <p className="m-3">
-                On this page you can find new exercises to train specific body functions. 
-                In addition, you can monitor your progress by adding number of repeatitions of exercise and it`s level.
-                The data is displayed on a graph, so you could have a clear understanding what is your progress on this exercise or body function
+                This app allows you to discover new exercises for your specific needs and monitor your training progress    
             </p>
 
             <h4 style={{color: "#7FB3D5"}}>How to use the page?</h4>
 
             <p className="m-2">
-                You can move through public and private resources using navigation bar. Also you can create you own objects with it.
-                From the list you can click buttons to get on resources page. If the resource if private, you can modify it or add
-                trainings to it. You can follow on public resource and use it as a private one
+                Move through navigation panel to look at body functions and exercises. Use buttons to go their pages
+                If you are logged in, you can follow exercise, add trainings to your training history and look at your progress visualised
+                as a graph! <br/>
+                If you are not satisfied with proposed exercises or body functions, you can create your own and configure them as you want
+                <br/>
+                To learn more, go to the help page:<br/>
+                <Link style={{width: "150px"}} className="btn btn-primary m-3" to="/help">Help</Link>
             </p>
 
             <h5 style={{color: "#7FB3D5"}} className="m-2">Unauthorized user</h5>
-            <p>
-                You can look for variety of physical exercises and body functions.
-                You can look for specific exercises related to specific functions
-                <br/>
-                <b>You cannot create your own exercises and body functions and you cannot save your own training data</b>
+            <p className="m-2">
+                Unfortunately, most part of functionality requires you to log in/register
+                Fell free to set up your own account using buttons at the top right corner<br/>
+                Alternatively, you can use demo account with the same functionality:<br/>
+                <button className="btn btn-danger m-3" style={{width: "150px"}} onClick={() => {
+                    login("DemoUser","password").then(response => navigate("/"))
+                        .catch(error => console.log(error));
+                }}>Demo</button>
             </p>
 
-            <h5 style={{color: "#7FB3D5"}} className="m-2">Authorized user</h5>
-            <p>
-                You can create your own exercises, body functions, modify them, follow on prepared functions and save your training data
-            </p>
+            <h5 style={{color: "#7FB3D5"}} className="m-2">Enjoy!</h5>
 
-            
-            <div className="m-5">
-                <h5 style={{color: "#7FB3D5"}}>Try demo account</h5>
-                <span style={{color: "red"}}>Demo account feature is not working right now</span>
-                <p className="m-3">If you don`t want to register your own account, you can try out demo-account</p>
-                {isAuthenticated ? 
-                    <span style={{color:"red"}}>You are authorized already, logout to use demo account</span>
-                    :
-                    <button  style={{width: "150px", background: "#2E86C1"}} className="btn btn-primary">Demo</button>
-                }
-                
-            </div>
         </div>
     )
     
