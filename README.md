@@ -10,6 +10,8 @@ https://www.youtube.com/watch?v=lGKzXSC5m4g
 
 # Tech Stack: 
 Repository level - MySql database
+
 Backend - Java Spring Boot
+
 Front End - Java Script React
  
